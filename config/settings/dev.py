@@ -12,5 +12,9 @@ DATABASES = {
     }
 }
 
+AUTH_USER_MODEL = 'user.CustomUser'
+
 INSTALLED_APPS += [
+    #Local Apps
+    'user'
 ]
