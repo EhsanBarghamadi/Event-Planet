@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
-
+from core.models import TimeStampedModel
 class CustomUserManager(BaseUserManager):
     def _create_user(self, phone, password, **extra_field):
         if not phone:
@@ -27,7 +27,7 @@ class CustomUserManager(BaseUserManager):
         
         return self.create_user(phone, password, **extra_field)
 
-class CustomUser(AbstractBaseUser, PermissionsMixin):
+class CustomUser(AbstractBaseUser, PermissionsMixin, TimeStampedModel):
     class Roles(models.TextChoices):
         ORGANIZER = 'ORGANIZER', 'Organizer'
         PARTICIPANT = 'PARTICIPANT', 'Participant'
