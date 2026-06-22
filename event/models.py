@@ -1,6 +1,6 @@
 from django.db import models
 from django.conf import settings
-from core.models import SluggedModel
+from core.models import TimeStampedModel, SluggedModel
 
 class Event(SluggedModel):
     class Status(models.TextChoices):
@@ -45,3 +45,35 @@ class Event(SluggedModel):
 
     def get_slug_source_field(self):
         return 'title'
+    
+class EventStage(TimeStampedModel):
+    
+    event = models.ForeignKey(
+        Event,
+        on_delete=models.CASCADE,
+        related_name='stages',
+        verbose_name='رویداد مربوطه'
+    )
+    title = models.CharField(
+        max_length=255,
+        verbose_name='عنوان مرحله'
+    )
+    description = models.TextField(
+        verbose_name='توضیحات مرحله',
+        blank=True,
+        null=True
+    )
+    start_time = models.DateTimeField(
+        verbose_name='زمان شروع مرحله'
+    )
+    end_time = models.DateTimeField(
+        verbose_name='زمان پایان مرحله'
+    )
+
+    class Meta:
+        verbose_name = 'مرحله رویداد'
+        verbose_name_plural = 'مراحل رویداد'
+        ordering = ['start_time']
+
+    def __str__(self):
+        return f"{self.event.title} - {self.title}"
