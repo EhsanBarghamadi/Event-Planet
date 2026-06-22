@@ -20,4 +20,5 @@ INSTALLED_APPS += [
     'user',
     'event',
     'attribute',
+    'relation'
 ]
