@@ -28,7 +28,7 @@ class CustomUserManager(BaseUserManager):
         return self.create_user(phone, password, **extra_field)
 
 class CustomUser(AbstractBaseUser, PermissionsMixin, TimeStampedModel):
-    class Roles(models.TextChoices):
+    class Roles(models.TextChoices):  
         ORGANIZER = 'ORGANIZER', 'Organizer'
         PARTICIPANT = 'PARTICIPANT', 'Participant'
 
@@ -64,10 +64,14 @@ class CustomUser(AbstractBaseUser, PermissionsMixin, TimeStampedModel):
         help_text='مشخص میکند آیا این کاربر میتواند وارد پنل ادمین شود یا نه'
     )
 
+    class Meta:
+        verbose_name = 'کاربر'
+        verbose_name_plural = 'کاربرها'
+
     USERNAME_FIELD = 'phone'
     REQUIRED_FIELDS = ['first_name', 'last_name']
 
     objects = CustomUserManager()
 
     def __str__(self):
-        return self.phone
+        return f'{self.first_name} {self.last_name}'

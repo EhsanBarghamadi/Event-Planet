@@ -1,6 +1,7 @@
 from django.db import models
 from core.models import TimeStampedModel
 from event.models import Event
+from django.core.exceptions import ValidationError
 
 class Attribute(TimeStampedModel):
 
@@ -63,3 +64,29 @@ class EventAttributeValue(TimeStampedModel):
         elif self.attribute.data_type == Attribute.DataType.BOOLEAN:
             return self.value_bool
         return None
+
+    def clean(self):
+            super().clean()
+            
+            if not hasattr(self, 'attribute'):
+                return
+
+            data_type = self.attribute.data_type
+
+            if data_type == Attribute.DataType.TEXT:
+                if self.value_text is None or self.value_text == '':
+                    raise ValidationError({'value_text': 'برای ویژگی متنی، وارد کردن این فیلد الزامی است.'})
+                if self.value_int is not None or self.value_bool is not None:
+                    raise ValidationError('برای ویژگی متنی، فیلدهای عددی و بولین باید خالی باشند.')
+
+            elif data_type == Attribute.DataType.INTEGER:
+                if self.value_int is None:
+                    raise ValidationError({'value_int': 'برای ویژگی عددی، وارد کردن این فیلد الزامی است.'})
+                if self.value_text is not None or self.value_bool is not None:
+                    raise ValidationError('برای ویژگی عددی، فیلدهای متنی و بولین باید خالی باشند.')
+
+            elif data_type == Attribute.DataType.BOOLEAN:
+                if self.value_bool is None:
+                    raise ValidationError({'value_bool': 'برای ویژگی بولین، انتخاب این فیلد الزامی است.'})
+                if self.value_text is not None or self.value_int is not None:
+                    raise ValidationError('برای ویژگی بولین، فیلدهای متنی و عددی باید خالی باشند.')

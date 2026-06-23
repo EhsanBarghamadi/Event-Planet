@@ -40,6 +40,11 @@ class Event(SluggedModel):
         verbose_name='تاریخ پایان'
     )
 
+    class Meta:
+        verbose_name = 'رویداد'
+        verbose_name_plural = 'رویداد ها'
+        ordering = ['start_date']
+        
     def __str__(self):
         return self.title
 
