@@ -1,9 +1,19 @@
 import re
 from rest_framework import serializers
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from django.contrib.auth import authenticate
 from .models import CustomUser
 
-
+class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
+    
+    def validate(self, attrs):
+        data = super().validate(attrs)
+        data['first_name'] = self.user.first_name
+        data['last_name'] = self.user.last_name
+        data['role'] = self.user.role
+        data['phone'] = self.user.phone
+        return data
+    
 class UserRegisterSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
     class Meta:
@@ -23,7 +33,7 @@ class UserRegisterSerializer(serializers.ModelSerializer):
         user = CustomUser.objects.create_user(phone, password, **validated_data)
         return user
     
-    class UserLoginSerializer(serializers.Serializer):
+class UserLoginSerializer(serializers.Serializer):
         phone = serializers.CharField(write_only=True)
         password = serializers.CharField(write_only=True)
 
