@@ -15,6 +15,10 @@ DATABASES = {
 AUTH_USER_MODEL = 'user.CustomUser'
 
 INSTALLED_APPS += [
+    #Third Party
+    'rest_framework',
+    'django_filters',
+    'markdown', 
     #Local Apps
     'core',
     'user',
@@ -22,3 +26,9 @@ INSTALLED_APPS += [
     'attribute',
     'relation'
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_FILTER_BACKENDS': [
+        'django_filters.rest_framework.DjangoFilterBackend',
+    ],
+}
