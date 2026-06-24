@@ -19,6 +19,7 @@ INSTALLED_APPS += [
     'rest_framework',
     'django_filters',
     'markdown', 
+    'drf_spectacular',
     #Local Apps
     'core',
     'user',
@@ -31,4 +32,12 @@ REST_FRAMEWORK = {
     'DEFAULT_FILTER_BACKENDS': [
         'django_filters.rest_framework.DjangoFilterBackend',
     ],
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+}
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'Event Planet API',
+    'DESCRIPTION': 'Event Planet description',
+    'VERSION': '1.0.0',
+    'SERVE_INCLUDE_SCHEMA': False,
 }
