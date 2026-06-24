@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from core.models import TimeStampedModel
+
 class CustomUserManager(BaseUserManager):
     def _create_user(self, phone, password, **extra_field):
         if not phone:
