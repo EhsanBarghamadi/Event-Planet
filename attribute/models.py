@@ -1,9 +1,9 @@
 from django.db import models
-from core.models import TimeStampedModel
+from core.models import TimeStampedModel, SluggedModel
 from event.models import Event
 from django.core.exceptions import ValidationError
 
-class Attribute(TimeStampedModel):
+class Attribute(SluggedModel):
 
     class DataType(models.TextChoices):
         TEXT = 'TEXT', 'متنی'
@@ -27,7 +27,9 @@ class Attribute(TimeStampedModel):
 
     def __str__(self):
         return f"{self.name} ({self.get_data_type_display()})"
-
+    
+    def get_slug_source_field(self):
+        return self.name
 
 class EventAttributeValue(TimeStampedModel):
 
