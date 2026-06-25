@@ -17,6 +17,8 @@ AUTH_USER_MODEL = 'user.CustomUser'
 INSTALLED_APPS += [
     #Third Party
     'rest_framework',
+    'rest_framework_simplejwt',
+    'rest_framework_simplejwt.token_blacklist', 
     'django_filters',
     'markdown', 
     'drf_spectacular',
