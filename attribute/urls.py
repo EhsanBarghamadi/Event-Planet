@@ -8,5 +8,5 @@ router.register(r'eventattributevalue', EventAttributeValueViewSet, basename='ev
 router.register(r'attribute', AttributeViewSet, basename='attribute')
 
 urlpatterns = [
-    path('api/', include(router.urls)),
+    path('', include(router.urls)),
 ]

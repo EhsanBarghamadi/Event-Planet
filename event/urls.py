@@ -7,5 +7,5 @@ router = DefaultRouter()
 router.register(r'event', EventViewSet, basename='event')
 
 urlpatterns = [
-    path('api/', include(router.urls))
+    path('', include(router.urls))
 ]
