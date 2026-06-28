@@ -10,7 +10,7 @@ class EventSerializer(serializers.ModelSerializer):
         fields = ['id', 'organizer', 'title', 'description', 
                   'status', 'capacity', 'start_date',
                     'end_date', 'attribute_values']
-        read_only_fields = ['attribute_values']
+        read_only_fields = ['attribute_values', 'organizer']
 
     def validate_start_date(self, value):
         today = timezone.localdate()

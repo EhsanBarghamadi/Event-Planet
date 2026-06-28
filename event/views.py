@@ -16,3 +16,6 @@ class EventViewSet(viewsets.ModelViewSet):
         if self.action in ['create', 'update', 'destroy', 'partial_update']:
             return [permissions.IsAuthenticated()]
         return [permissions.AllowAny()]
+    
+    def perform_create(self, serializer):
+        serializer.save(organizer=self.request.user)
