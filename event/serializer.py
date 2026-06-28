@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from django.utils import timezone
 from attribute.serializers import EventAttributeValueSerializer
+from rest_framework.exceptions import PermissionDenied
 from .models import Event, EventStage
 
 class EventSerializer(serializers.ModelSerializer):
@@ -21,6 +22,7 @@ class EventSerializer(serializers.ModelSerializer):
 class EventStageSerializer(serializers.ModelSerializer):
     event = EventSerializer(read_only=True)
     event_id = serializers.PrimaryKeyRelatedField(
+        source='event',
         queryset=Event.objects.all(),
         write_only=True
     )
@@ -48,7 +50,7 @@ class EventStageSerializer(serializers.ModelSerializer):
     def validate(self, attrs):
         start_time = attrs.get('start_time')
         end_time = attrs.get('end_time')
-        event = attrs.get('event_id')
+        event = attrs.get('event')
 
         instance = self.instance 
 
@@ -59,10 +61,15 @@ class EventStageSerializer(serializers.ModelSerializer):
             })
         
         if not instance:
+            request = self.context.get('request')
+
             if not event:
                 raise serializers.ValidationError({
                     'event_id': 'رویداد الزامی است!'
                 })
+            
+            if event.organizer != request.user:
+                raise PermissionDenied('شما مالک این رویداد نیستید.')
             
             if start_time < event.start_date:
                 raise serializers.ValidationError({
@@ -74,7 +81,6 @@ class EventStageSerializer(serializers.ModelSerializer):
                     'end_time': f'زمان پایان نباید بعد از {event.end_date} باشد'
                 })
             
-            attrs['event'] = event
 
             overlapping = EventStage.objects.filter(
                 event=event,
