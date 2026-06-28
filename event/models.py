@@ -99,11 +99,14 @@ class EventStage(TimeStampedModel):
     end_time = models.DateTimeField(
         verbose_name='زمان پایان مرحله'
     )
+    order = models.PositiveIntegerField(
+         verbose_name='ترتیب'
+    )
 
     class Meta:
         verbose_name = 'مرحله رویداد'
         verbose_name_plural = 'مراحل رویداد'
-        ordering = ['start_time']
+        ordering = ['order']
 
     def __str__(self):
         return f"{self.event.title} - {self.title}"
