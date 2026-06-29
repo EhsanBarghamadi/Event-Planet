@@ -4,7 +4,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import SearchFilter
 from core.permissions import IsOrganizer, IsEventOwner
 from .models import Event, EventStage
-from .serializer import EventSerializer, EventStageSerializer
+from .serializers import EventSerializer, EventStageSerializer
 
 class EventViewSet(viewsets.ModelViewSet):
     serializer_class = EventSerializer
