@@ -12,6 +12,15 @@ class Event(SluggedModel):
         FINISHED = 'FINISHED', 'پایان یافته'
         CANCELLED = 'CANCELLED', 'لغو شده'
 
+    ALLOWED_TRANSITIONS = {
+        Status.DRAFT: [Status.PUBLISHED, Status.CANCELLED],
+        Status.PUBLISHED: [Status.ONGOING, Status.CLOSED, Status.CANCELLED],
+        Status.ONGOING: [Status.FINISHED, Status.CANCELLED],
+        Status.CLOSED: [Status.FINISHED, Status.CANCELLED],
+        Status.FINISHED: [],
+        Status.CANCELLED: [],
+        }
+    
     organizer = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
@@ -47,7 +56,17 @@ class Event(SluggedModel):
         verbose_name = 'رویداد'
         verbose_name_plural = 'رویداد ها'
         ordering = ['start_date']
-        
+    
+    @classmethod
+    def get_allowed_transitions(cls, from_status):
+         return cls.ALLOWED_TRANSITIONS.get(from_status, [])
+    
+    @classmethod
+    def is_transition_allowed(cls, from_status, to_status):
+        allowed = cls.get_allowed_transitions(from_status)
+        return to_status in allowed
+
+
     def __str__(self):
         return self.title
 
@@ -56,26 +75,21 @@ class Event(SluggedModel):
     
     def clean(self):
         super().clean()
+
         if self.start_date and self.end_date:
             if self.end_date <= self.start_date:
                 raise ValidationError({
                     'end_date': 'تاریخ پایان رویداد نمی‌تواند قبل یا هم‌زمان با تاریخ شروع آن باشد.'
                 })
+            
         if self.pk:
              original_status = Event.objects.get(pk=self.pk).status
              if original_status != self.status:
-                allowed_transitions = {
-                    Event.Status.DRAFT: [Event.Status.PUBLISHED, Event.Status.CANCELLED],
-                    Event.Status.PUBLISHED: [Event.Status.ONGOING, Event.Status.CLOSED, Event.Status.CANCELLED],
-                    Event.Status.ONGOING: [Event.Status.FINISHED, Event.Status.CANCELLED],
-                    Event.Status.CLOSED: [Event.Status.FINISHED, Event.Status.CANCELLED],
-                    Event.Status.FINISHED: [],
-                    Event.Status.CANCELLED: [],
-                }
-                if self.status not in allowed_transitions.get(original_status, []):
+                if not self.is_transition_allowed(original_status, self.status):
                      raise ValidationError({
-                          'status': f'تغییر وضعیت غیرمجاز از {original_status} به {self.status}.'
+                          'status': f'تغییر وضعیت غیر مجاز از {original_status} به {self.status}'
                      })
+                
 class EventStage(TimeStampedModel):
     
     event = models.ForeignKey(
