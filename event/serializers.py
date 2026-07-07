@@ -32,6 +32,7 @@ class EventSerializer(serializers.ModelSerializer):
         else:
             start_date = attrs.get('start_date')
             end_date = attrs.get('end_date')
+
         new_status = attrs.get('status')
 
         if start_date and end_date:
@@ -69,74 +70,68 @@ class EventStageSerializer(serializers.ModelSerializer):
     event_id = serializers.PrimaryKeyRelatedField(
         source='event',
         queryset=Event.objects.all(),
-        write_only=True
+        write_only=True,
+        required=False
     )
     class Meta:
         model = EventStage
         fields = ['id', 'event', 'event_id', 'title', 'description', 
-                  'start_time', 'end_time', 'order']
-        
-    def validate_start_time(self, value):
-        if value and self.instance and value < self.instance.event.start_date:
-            raise serializers.ValidationError(
-                 'زمان شروع باید بعد از شروع رویداد باشد',
-                 code='invalid_start_time'
-            )
-        return value
-    
-    def validate_end_time(self, value):
-        if value and self.instance and value > self.instance.event.end_date:
-            raise serializers.ValidationError(
-                'زمان پایان باید قبل از پایان رویداد باشد',
-                code='invalid_end_time'
-            )
-        return value
+                  'start_time', 'end_time', 'order'] 
     
     def validate(self, attrs):
-        start_time = attrs.get('start_time')
-        end_time = attrs.get('end_time')
-        event = attrs.get('event')
+        if self.instance:
+            start_time = attrs.get('start_time', self.instance.start_time)
+            end_time =attrs.get('end_time', self.instance.end_time)
+            event = attrs.get('event', self.instance.event)
+        else:
+            start_time = attrs.get('start_time')
+            end_time =attrs.get('end_time')
+            event = attrs.get('event')
 
-        instance = self.instance 
+        if not self.instance and not event:
+            raise serializers.ValidationError({
+                'event_id': 'رویداد الزامی است!'
+            })
+        
+        if not self.instance:
+            request = self.context['request']
+            if event.organizer != request.user:
+                raise PermissionDenied({
+                    'permission': 'شما با این رویداد دسترسی ندارید.'
+                })
+            
+        if self.instance:
+            if 'event' in attrs:
+                if event != self.instance.event:
+                    raise serializers.ValidationError({'event': 'تغییر رویداد مجاز نیست!'})
 
         if start_time and end_time and start_time >= end_time:
             raise serializers.ValidationError({
-                'start_time': 'زمان شروع باید قبل از زمان پایان باشد',
-                'end_time': 'زمان پایان باید بعد از زمان شروع باشد'
+                'start_time': 'زمان شروع نمی تواند بعد از زمان پایان باشد'
             })
         
-        if not instance:
-            request = self.context.get('request')
+        if start_time < event.start_date:
+            raise serializers.ValidationError({
+                'start_time':'زمان شروع نمی تواند قبل از شروع رویداد باشد'
+            })
+        
+        if end_time > event.end_date:
+            raise serializers.ValidationError({
+                'end_time': 'زمان پایان نمی تواند بعد از پایان رویداد باشد'
+            })
+        
+        overlapping = EventStage.objects.filter(
+            event=event,
+            start_time__lt=end_time,
+            end_time__gt=start_time
+        )
 
-            if not event:
-                raise serializers.ValidationError({
-                    'event_id': 'رویداد الزامی است!'
-                })
-            
-            if event.organizer != request.user:
-                raise PermissionDenied('شما مالک این رویداد نیستید.')
-            
-            if start_time < event.start_date:
-                raise serializers.ValidationError({
-                    'start_time': f'زمان شروع نباید قبل از {event.start_date} باشد'
-                })
-            
-            if end_time > event.end_date:
-                raise serializers.ValidationError({
-                    'end_time': f'زمان پایان نباید بعد از {event.end_date} باشد'
-                })
-            
-
-            overlapping = EventStage.objects.filter(
-                event=event,
-                start_time__lt=end_time,
-                end_time__gt=start_time
+        if self.instance:
+            overlapping = overlapping.exclude(pk=self.instance.pk)
+        
+        if overlapping.exists():
+            overlapping_titles = ', '.join([f'"{s.title}"' for s in overlapping])
+            raise serializers.ValidationError(
+                f'این مرحله با مرحله‌های دیگر تداخل زمانی دارد: {overlapping_titles}'
             )
-            if overlapping.exists():
-                raise serializers.ValidationError(
-                    'این مرحله با مراحل دیگر تداخل زمانی دارد'
-                )
-            
-            if instance:
-
         return attrs
