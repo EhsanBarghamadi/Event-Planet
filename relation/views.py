@@ -1,8 +1,8 @@
 from rest_framework import viewsets
 from rest_framework import permissions
-from core.permissions import IsParticipant
-from .models import Registration, Feedback
-from .serializers import RegistrationSerializer, FeedbackSerializer
+from core.permissions import IsParticipant, IsEventOwner, IsOrganizer
+from .models import Registration, Feedback, Result
+from .serializers import RegistrationSerializer, FeedbackSerializer, ResultSerializer
 
 class RegistrationViewSet(viewsets.ModelViewSet):
     serializer_class = RegistrationSerializer
@@ -37,3 +37,14 @@ class FeedbackViewSet(viewsets.ModelViewSet):
     
     def perform_create(self, serializer):
         serializer.save(participant=self.request.user)
+
+class ResultViewSet(viewsets.ModelViewSet):
+    serializer_class = ResultSerializer
+
+    def get_permissions(self):
+        if self.action in ['create', 'partial_update', 'update', 'destroy']:
+            return [permissions.IsAuthenticated(), IsOrganizer(), IsEventOwner()]
+        return [permissions.AllowAny()]
+
+    def get_queryset(self):
+        return Result.objects.filter(event__status='FINISHED')
