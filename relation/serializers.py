@@ -1,6 +1,9 @@
 from rest_framework import serializers
+
 from event.models import Event
+from user.serializers import UserReadOnlySerializer
 from event.serializers import EventSerializer
+from user.models import CustomUser
 from .models import Registration, Feedback, Result
 
 class RegistrationSerializer(serializers.ModelSerializer):
@@ -70,3 +73,41 @@ class FeedbackSerializer(serializers.ModelSerializer):
         
 
         return attrs
+
+class ResultSerializer(serializers.ModelSerializer):
+    event = EventSerializer(read_only=True)
+    event_id = serializers.PrimaryKeyRelatedField(
+        source='event',
+        queryset=Event.objects.all(),
+        write_only=True
+    )
+    participant = UserReadOnlySerializer(read_only=True)
+    participant_id = serializers.PrimaryKeyRelatedField(
+        source='participant',
+        queryset=CustomUser.objects.all(),
+        write_only=True
+    )
+    class Meta:
+        model = Result
+        fields = ['event', 'event_id', 'participant', 'participant_id', 'achievement']
+    
+    def validate(self, attrs):
+        event = attrs.get('event')
+        participant = attrs.get('participant')
+        request = self.context.get('request')
+
+        if request.user != event.organizer:
+            raise serializers.ValidationError({
+                'user': 'شما مالک این رویداد نیستید!'
+            })
+        if event.status != 'FINISHED':
+            raise serializers.ValidationError({
+                'event': 'فقط برای رویدادهای پایان‌یافته می‌توانید نتیجه ثبت کنید'
+            })
+        registration = Registration.objects.filter(participant=participant , event=event)
+        if not registration.exists():
+            raise serializers.ValidationError({
+                'participant': 'این کاربر در این رویداد ثبت نام نکرده است.'
+            })
+        return attrs
+        

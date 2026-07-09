@@ -1,8 +1,10 @@
 from django.db import models
 from django.conf import settings
 from django.core.validators import MinValueValidator, MaxValueValidator
+
 from core.models import TimeStampedModel
 from event.models import Event
+
 
 class Registration(TimeStampedModel):
 
@@ -83,6 +85,7 @@ class Result(TimeStampedModel):
     class Meta:
         verbose_name = 'نتیجه رویداد'
         verbose_name_plural = 'نتایج رویدادها'
+        unique_together = ('event', 'participant')
 
     def __str__(self):
         return f"{self.event.title} - {self.participant.phone}: {self.achievement}"

@@ -46,3 +46,8 @@ class UserLoginSerializer(serializers.Serializer):
                 raise serializers.ValidationError('نام کاربری یا رمز عبور اشتباه است')
             attrs['user'] = user
             return attrs
+        
+class UserReadOnlySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CustomUser
+        fields = ['id', 'phone', 'first_name', 'last_name', 'role']
