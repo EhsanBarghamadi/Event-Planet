@@ -1,8 +1,10 @@
 from rest_framework import viewsets
 from rest_framework import permissions
+
 from core.permissions import IsParticipant, IsEventOwner, IsOrganizer
+from event.models import Event
 from .models import Registration, Feedback, Result
-from .serializers import RegistrationSerializer, FeedbackSerializer, ResultSerializer
+from .serializers import RegistrationSerializer, FeedbackSerializer, ResultSerializer, RegistrationReadOnlySerializer
 
 class RegistrationViewSet(viewsets.ModelViewSet):
     serializer_class = RegistrationSerializer

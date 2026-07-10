@@ -37,7 +37,13 @@ class RegistrationSerializer(serializers.ModelSerializer):
                 'participant':'شما قبلا ثبت نام کرده اید'
             })
         return attrs
-    
+
+class RegistrationReadOnlySerializer(serializers.ModelSerializer):
+    participant = UserReadOnlySerializer()
+    class Meta:
+        model = Registration
+        fields = ['participant', 'created_at']
+
 class FeedbackSerializer(serializers.ModelSerializer):
     event = EventSerializer(read_only=True)
     event_id = serializers.PrimaryKeyRelatedField(
