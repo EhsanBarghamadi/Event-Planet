@@ -15,7 +15,17 @@ class EventAttributeValueSerializer(serializers.ModelSerializer):
         fields = ['id', 'event', 'attribute', 'value_text', 'value_int', 'value_bool', 'created_at', 'updated_at']
 
     def validate(self, attrs):
-        attribute = attrs.get('attribute')
+        request = self.context.get('request')
+        if self.instance:
+            event = attrs.get('event', self.instance.event)
+            attribute = attrs.get('attribute', self.instance.attribute)
+        else:
+            event = attrs.get('event')
+            attribute = attrs.get('attribute')
+        
+        if event.organizer != request.user:
+            raise serializers.ValidationError('شما مالک این رویداد نیستید!')
+        
         if attribute:
             value_text = attrs.get('value_text')
             value_int = attrs.get('value_int')
