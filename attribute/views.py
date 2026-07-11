@@ -6,7 +6,7 @@ from .serializers import AttributeSerializer, EventAttributeValueSerializer
 from .models import Attribute, EventAttributeValue
 
 class AttributeViewSet(viewsets.ModelViewSet):
-    queryset = Attribute.objects.filter(event__status='PUBLISHED').prefetch_related('event_values')
+    queryset = Attribute.objects.filter(event_values__event__status='PUBLISHED').prefetch_related('event_values')
     serializer_class = AttributeSerializer
     
     def get_permissions(self):
