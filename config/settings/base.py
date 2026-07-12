@@ -24,6 +24,7 @@ INSTALLED_APPS = [
     'django_filters',
     'markdown', 
     'drf_spectacular',
+    'django_extensions',
     #Local Apps
     'core',
     'user',
