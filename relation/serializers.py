@@ -53,7 +53,7 @@ class FeedbackSerializer(serializers.ModelSerializer):
     )
     class Meta:
         model = Feedback
-        fields = ['participant', 'event', 'rating', 'comment']
+        fields = ['participant', 'event', 'event_id', 'rating', 'comment']
         read_only_fields = ['participant']
 
     def validate(self, attrs):
