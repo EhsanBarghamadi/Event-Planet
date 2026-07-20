@@ -14,6 +14,7 @@ class AttributeViewSet(viewsets.ModelViewSet):
             return [permissions.IsAuthenticated()]
         return [permissions.IsAdminUser()]
 
+
 class EventAttributeValueViewSet(viewsets.ModelViewSet):
     serializer_class = EventAttributeValueSerializer
 

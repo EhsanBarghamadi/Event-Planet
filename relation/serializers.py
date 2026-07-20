@@ -13,10 +13,11 @@ class RegistrationSerializer(serializers.ModelSerializer):
         queryset = Event.objects.all(),
         write_only = True
     )
+
     class Meta:
         model = Registration
-        fields = ['participant', 'event', 'event_id']
-        read_only_fields = ['participant']
+        fields = ['id', 'participant', 'event', 'event_id']
+        read_only_fields = ['participant', 'id']
 
     def validate(self, attrs):
         event = attrs.get('event')

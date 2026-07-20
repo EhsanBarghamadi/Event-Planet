@@ -5,6 +5,7 @@ class AttributeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Attribute
         fields = ['id', 'slug', 'name', 'data_type']
+        read_only_fields = ['slug']
 
 class EventAttributeValueSerializer(serializers.ModelSerializer):
     created_at = serializers.ReadOnlyField()

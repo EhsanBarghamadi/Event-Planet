@@ -8,7 +8,8 @@ from .serializers import RegistrationSerializer, FeedbackSerializer, ResultSeria
 
 class RegistrationViewSet(viewsets.ModelViewSet):
     serializer_class = RegistrationSerializer
-
+    http_method_names = ['get', 'post', 'delete']
+    
     def get_permissions(self):
         if self.action == 'create':
             return [permissions.IsAuthenticated(), IsParticipant()]
@@ -16,6 +17,10 @@ class RegistrationViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         user = self.request.user
+
+        if getattr(self, "swagger_fake_view", False):
+            return Registration.objects.none()
+        
         return Registration.objects.select_related('event').filter(participant=user)
 
     def perform_create(self, serializer):
@@ -26,6 +31,8 @@ class FeedbackViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         user = self.request.user
+        if getattr(self, "swagger_fake_view", False):
+            return Feedback.objects.none()
         if user.role == 'PARTICIPANT':
             return Feedback.objects.filter(participant=user)
         if user.role == 'ORGANIZER' and user.events.exists():

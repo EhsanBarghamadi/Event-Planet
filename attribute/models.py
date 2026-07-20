@@ -29,7 +29,7 @@ class Attribute(SluggedModel):
         return f"{self.name} ({self.get_data_type_display()})"
     
     def get_slug_source_field(self):
-        return self.name
+        return "name"
 
 class EventAttributeValue(TimeStampedModel):
 

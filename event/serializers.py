@@ -1,7 +1,8 @@
 from rest_framework import serializers
 from django.utils import timezone
-from attribute.serializers import EventAttributeValueSerializer
 from rest_framework.exceptions import PermissionDenied, ValidationError
+
+from attribute.serializers import EventAttributeValueSerializer
 from .models import Event, EventStage
 
 class EventSerializer(serializers.ModelSerializer):

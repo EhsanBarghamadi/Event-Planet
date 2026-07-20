@@ -6,12 +6,14 @@ from rest_framework.decorators import action
 from rest_framework.exceptions import PermissionDenied
 from rest_framework import status
 from rest_framework.response import Response
+from django.db.models import Q
 
 from core.permissions import IsOrganizer, IsEventOwner
 from relation.models import Registration
 from relation.serializers import RegistrationReadOnlySerializer
 from .models import Event, EventStage
 from .serializers import EventSerializer, EventStageSerializer
+
 
 class EventViewSet(viewsets.ModelViewSet):
     serializer_class = EventSerializer
@@ -23,7 +25,9 @@ class EventViewSet(viewsets.ModelViewSet):
         user = self.request.user
         if self.action in ['list', 'retrieve']:
             if user.is_authenticated and user.role == 'ORGANIZER':
-                return Event.objects.filter(status='PUBLISHED') | Event.objects.filter(organizer=user)
+                return Event.objects.filter(
+                    Q(status='PUBLISHED') | Q(organizer=user)
+                ).distinct()
             return Event.objects.filter(status='PUBLISHED')
         return Event.objects.all()
     
@@ -40,7 +44,7 @@ class EventViewSet(viewsets.ModelViewSet):
         serializer.save(organizer=self.request.user)
 
     @action(detail=True, methods=['get'])
-    def participants(self, request, pk=None):
+    def participants(self, request, pk=None, *args, **kwargs):
         event = Event.objects.filter(id=pk, organizer=request.user)
         if not event.exists():
             raise PermissionDenied('شما مالک این رویداد نیستید یا چنین رویدادی وجود ندارد!')

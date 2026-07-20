@@ -51,3 +51,6 @@ class UserReadOnlySerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
         fields = ['id', 'phone', 'first_name', 'last_name', 'role']
+
+class EmptyLogoutSerializer(serializers.Serializer):
+    pass

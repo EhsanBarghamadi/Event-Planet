@@ -129,9 +129,9 @@ class EventStage(TimeStampedModel):
         super().clean()
         if self.start_time and self.end_time:
             if self.end_time <= self.start_time:
-                            raise ValidationError({
-                                'end_time': 'زمان پایان مرحله نمی‌تواند قبل از زمان شروع آن باشد.'
-                            })
+                raise ValidationError({
+                    'end_time': 'زمان پایان مرحله نمی‌تواند قبل از زمان شروع آن باشد.'
+                })
         if self.event:
             if self.start_time < self.event.start_date:
                 raise ValidationError({
