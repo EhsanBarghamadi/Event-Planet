@@ -61,6 +61,9 @@ class FeedbackSerializer(serializers.ModelSerializer):
         event = attrs.get('event')
         request = self.context.get('request')
 
+        if event is None and self.instance:
+            event = self.instance.event
+
         if event.status != 'FINISHED':
             raise serializers.ValidationError({
                 'event': 'فقط برای رویدادهای پایان‌یافته می‌توانید بازخورد ثبت کنید'
@@ -72,13 +75,15 @@ class FeedbackSerializer(serializers.ModelSerializer):
                 'participant': 'برای ثبت نظر باید در دوره مورد نظر ثبت نام کنید'
             })
         
-        feedback = Feedback.objects.filter(event=event, participant=request.user)
-        if feedback.exists():
+        feedback_qs = Feedback.objects.filter(event=event, participant=request.user)
+        if self.instance:
+            feedback_qs = feedback_qs.exclude(pk=self.instance.pk)
+
+        if feedback_qs.exists():
             raise serializers.ValidationError({
                 'participant': 'شما قبلا نظر خود را ثبت کرده اید'
             })
         
-
         return attrs
 
 class ResultSerializer(serializers.ModelSerializer):
@@ -102,6 +107,12 @@ class ResultSerializer(serializers.ModelSerializer):
         event = attrs.get('event')
         participant = attrs.get('participant')
         request = self.context.get('request')
+
+        if event is None and self.instance:
+            event = self.instance.event
+
+        if participant is None and self.instance:
+            participant = self.instance.participant
 
         if request.user != event.organizer:
             raise serializers.ValidationError({
