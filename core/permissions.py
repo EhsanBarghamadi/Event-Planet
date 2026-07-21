@@ -1,6 +1,7 @@
 from rest_framework import permissions
 
 from event.models import Event
+
 class IsOrganizer(permissions.BasePermission):
 
     def has_permission(self, request, view):
