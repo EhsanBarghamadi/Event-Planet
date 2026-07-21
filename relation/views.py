@@ -1,7 +1,7 @@
 from rest_framework import viewsets
 from rest_framework import permissions
 
-from core.permissions import IsParticipant, IsEventOwner, IsOrganizer
+from core.permissions import IsParticipant, IsEventOwner, IsOrganizer, IsFeedbackOwner
 from event.models import Event
 from .models import Registration, Feedback, Result
 from .serializers import RegistrationSerializer, FeedbackSerializer, ResultSerializer, RegistrationReadOnlySerializer
@@ -42,6 +42,8 @@ class FeedbackViewSet(viewsets.ModelViewSet):
     def get_permissions(self):
         if self.action == 'create':
             return [permissions.IsAuthenticated(), IsParticipant()]
+        elif self.action in ['update', 'partial_update', 'destroy']:
+            return [permissions.IsAuthenticated(), IsParticipant(), IsFeedbackOwner()]
         return [permissions.IsAuthenticated()]
     
     def perform_create(self, serializer):

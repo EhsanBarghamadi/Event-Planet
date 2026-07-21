@@ -14,7 +14,6 @@ class IsParticipant(permissions.BasePermission):
             return True
         return False
         
-    
 class IsEventOwner(permissions.BasePermission):
 
     def has_object_permission(self, request, view, obj):
@@ -22,3 +21,10 @@ class IsEventOwner(permissions.BasePermission):
             return True
         event = obj if hasattr(obj , 'organizer') else getattr(obj, 'event', None)
         return bool(event and event.organizer_id == request.user.id)
+
+class IsFeedbackOwner(permissions.BasePermission):
+
+    def has_object_permission(self, request, view, obj):
+        if request.method in permissions.SAFE_METHODS:
+            return True
+        return obj.participant == request.user
