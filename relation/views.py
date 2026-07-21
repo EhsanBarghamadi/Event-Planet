@@ -1,5 +1,6 @@
 from rest_framework import viewsets
 from rest_framework import permissions
+from django.db import transaction
 
 from core.permissions import IsParticipant, IsEventOwner, IsOrganizer, IsFeedbackOwner
 from event.models import Event
@@ -23,6 +24,10 @@ class RegistrationViewSet(viewsets.ModelViewSet):
         
         return Registration.objects.select_related('event').filter(participant=user)
 
+    @transaction.atomic
+    def create(self, request, *args, **kwargs):
+        return super().create(request, *args, **kwargs)
+    
     def perform_create(self, serializer):
         serializer.save(participant=self.request.user)
 

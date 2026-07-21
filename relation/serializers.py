@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from django.db import transaction
 
 from event.models import Event
 from user.serializers import UserReadOnlySerializer
@@ -27,16 +28,22 @@ class RegistrationSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError({
                 'event':'ثبت نام فقط روی رویداد های منتشر شده انجام می شود'
             })
-        num_participant = Registration.objects.filter(event=event).count()
-        if num_participant >= event.capacity:
-            raise serializers.ValidationError({
-                'event': 'ظرفیت این دوره تکمیل شده است'
-            })
-        check_registration = Registration.objects.filter(event=event, participant=required.user)
+
+        locked_event = Event.objects.select_for_update().get(pk=event.pk)
+
+        check_registration = Registration.objects.filter(event=locked_event, participant=required.user)
         if check_registration.exists():
             raise serializers.ValidationError({
                 'participant':'شما قبلا ثبت نام کرده اید'
             })
+
+        num_participant = Registration.objects.filter(event=locked_event).count()
+    
+        if num_participant >= event.capacity:
+            raise serializers.ValidationError({
+                'event': 'ظرفیت این دوره تکمیل شده است'
+            })
+        
         return attrs
 
 class RegistrationReadOnlySerializer(serializers.ModelSerializer):
