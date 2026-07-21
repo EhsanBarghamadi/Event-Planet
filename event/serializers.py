@@ -98,14 +98,10 @@ class EventStageSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError({
                 'event_id': 'رویداد الزامی است!'
             })
-        
-        if not self.instance:
-            request = self.context['request']
-            if event.organizer != request.user:
-                raise PermissionDenied({
-                    'permission': 'شما با این رویداد دسترسی ندارید.'
-                })
-            
+
+        if event.status != Event.Status.DRAFT:
+            raise serializers.ValidationError({'event': 'تغییرات فقط روی رویدادهای پیش‌نویس (DRAFT) مجاز است.'})
+
         if self.instance:
             if 'event' in attrs:
                 if event != self.instance.event:
@@ -137,7 +133,7 @@ class EventStageSerializer(serializers.ModelSerializer):
         
         if overlapping.exists():
             overlapping_titles = ', '.join([f'"{s.title}"' for s in overlapping])
-            raise serializers.ValidationError(
-                f'این مرحله با مرحله‌های دیگر تداخل زمانی دارد: {overlapping_titles}'
-            )
+            raise serializers.ValidationError({
+                'start_time': f'این مرحله با مرحله‌های دیگر تداخل زمانی دارد: {overlapping_titles}'
+            })
         return attrs
