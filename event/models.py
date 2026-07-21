@@ -76,6 +76,11 @@ class Event(SluggedModel):
     def clean(self):
         super().clean()
 
+        if self.capacity is not None and self.capacity <= 0:
+            raise ValidationError({
+                'capacity': 'ظرفیت رویداد باید بزرگتر از صفر باشد.'
+            })
+
         if self.start_date and self.end_date:
             if self.end_date <= self.start_date:
                 raise ValidationError({
@@ -132,7 +137,8 @@ class EventStage(TimeStampedModel):
                 raise ValidationError({
                     'end_time': 'زمان پایان مرحله نمی‌تواند قبل از زمان شروع آن باشد.'
                 })
-        if self.event:
+        
+        if self.event and self.start_time and self.end_time:
             if self.start_time < self.event.start_date:
                 raise ValidationError({
                     'start_time': 'زمان شروع این مرحله نمی‌تواند قبل از شروع کل رویداد باشد.'
@@ -140,4 +146,18 @@ class EventStage(TimeStampedModel):
             if self.end_time > self.event.end_date:
                 raise ValidationError({
                     'end_time': 'زمان پایان این مرحله نمی‌تواند بعد از پایان کل رویداد باشد.'
+                })
+
+            overlapping_stages = EventStage.objects.filter(
+                event=self.event,
+                start_time__lt=self.end_time,
+                end_time__gt=self.start_time
+            )
+
+            if self.pk:
+                overlapping_stages = overlapping_stages.exclude(pk=self.pk)
+
+            if overlapping_stages.exists():
+                raise ValidationError({
+                    'start_time': 'زمان این مرحله با مراحل دیگر همین رویداد تداخل دارد.'
                 })
