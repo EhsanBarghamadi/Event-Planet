@@ -1,3 +1,4 @@
+import uuid
 from django.db import models
 from django.utils.text import slugify
 
@@ -33,5 +34,15 @@ class SluggedModel(TimeStampedModel):
                 source_field_name = self.get_slug_source_field()
                 source_value = getattr(self, source_field_name, '')
                 if source_value:
-                    self.slug = slugify(source_value, allow_unicode=True)
+                    base_slug = slugify(source_value, allow_unicode=True)
+                    if not base_slug:
+                        base_slug = f"item-{uuid.uuid4().hex[:8]}"
+                    base_slug = base_slug[:240]
+                    slug = base_slug
+                    counter = 1
+                    model = self.__class__
+                    while model.objects.filter(slug=slug).exists():
+                        slug = f'{base_slug}-{counter}'
+                        counter += 1
+                    self.slug = slug
             super().save(*args, **kwargs)
