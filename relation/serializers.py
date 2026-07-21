@@ -1,5 +1,4 @@
 from rest_framework import serializers
-from django.db import transaction
 
 from event.models import Event
 from user.serializers import UserReadOnlySerializer

@@ -16,8 +16,13 @@ class EventSerializer(serializers.ModelSerializer):
         read_only_fields = ['attribute_values', 'organizer']
 
     def validate_start_date(self, value):
-        today = timezone.localdate()
-        if value.date() < today:
+        today = timezone.now()
+        if self.instance:
+            if self.instance.start_date == value:
+                return value
+            elif value < today:
+                raise serializers.ValidationError('تاریخ شروع نمی‌تواند در گذشته باشد.')
+        elif value < today:
             raise serializers.ValidationError('تاریخ شروع رویداد نمی‌تواند در گذشته باشد')
         return value
     
