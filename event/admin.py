@@ -11,5 +11,5 @@ class EventAdmin(admin.ModelAdmin):
 @admin.register(EventStage)
 class EventStageAdmin(admin.ModelAdmin):
     list_display = ['event', 'title', 'start_time', 'end_time']
-    search_fields = ['event']
+    search_fields = ['event__title']
     search_help_text = 'جست و جو بر اساس رویداد'
