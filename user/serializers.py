@@ -19,7 +19,17 @@ class UserRegisterSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
         fields = ['phone', 'first_name', 'last_name', 'role', 'password']
+        extra_kwargs = {
+            'password': {'write_only': True}
+        }
 
+    def validate_role(self, value):
+        allowed_roles = [CustomUser.Roles.ORGANIZER, CustomUser.Roles.PARTICIPANT]
+        
+        if value not in allowed_roles:
+            raise serializers.ValidationError('انتخاب این نقش در ثبت‌نام عمومی مجاز نیست.')
+        return value
+    
     def validate_phone(self, value):
         pattern = r"^(\+98|0)?9\d{9}$"
         match = re.match(pattern, value)

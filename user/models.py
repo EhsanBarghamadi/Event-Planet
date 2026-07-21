@@ -32,6 +32,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin, TimeStampedModel):
     class Roles(models.TextChoices):  
         ORGANIZER = 'ORGANIZER', 'Organizer'
         PARTICIPANT = 'PARTICIPANT', 'Participant'
+        STAFF = 'STAFF', 'staff'
 
     role = models.CharField(
         verbose_name=' نقش',
