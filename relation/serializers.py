@@ -61,7 +61,7 @@ class FeedbackSerializer(serializers.ModelSerializer):
     class Meta:
         model = Feedback
         fields = ['participant', 'event', 'event_id', 'rating', 'comment']
-        read_only_fields = ['participant']
+        read_only_fields = ['participant', 'id']
 
     def validate(self, attrs):
         event = attrs.get('event')
@@ -107,8 +107,9 @@ class ResultSerializer(serializers.ModelSerializer):
     )
     class Meta:
         model = Result
-        fields = ['event', 'event_id', 'participant', 'participant_id', 'achievement']
-    
+        fields = ['id', 'event', 'event_id', 'participant', 'participant_id', 'achievement']
+        read_only_fields = ['id']
+        
     def validate(self, attrs):
         event = attrs.get('event')
         participant = attrs.get('participant')

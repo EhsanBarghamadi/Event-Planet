@@ -1,5 +1,5 @@
 import uuid
-from django.db import models
+from django.db import models, transaction, IntegrityError
 from django.utils.text import slugify
 
 class TimeStampedModel(models.Model):
@@ -45,4 +45,15 @@ class SluggedModel(TimeStampedModel):
                         slug = f'{base_slug}-{counter}'
                         counter += 1
                     self.slug = slug
+                    max_attempts = 5
+                    for attempt in range(max_attempts):
+                        try:
+                            with transaction.atomic():
+                                super().save(*args, **kwargs)
+                            return
+                        except IntegrityError:
+                            if attempt == max_attempts - 1:
+                                raise
+                            self.slug = f'{base_slug}-{uuid.uuid4().hex[:6]}'
+                    return
             super().save(*args, **kwargs)

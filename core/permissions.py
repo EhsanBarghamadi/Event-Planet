@@ -20,11 +20,21 @@ class IsEventOwner(permissions.BasePermission):
 
     def has_permission(self, request, view):
         if view.action == 'create':
-            event_id = request.data.get('event') or request.data.get('event_id')
-            if not event_id:
+            event_id = request.data.get('event_id')
+            event = request.data.get('event')
+ 
+            if not event_id and not event:
                 return True
-            return Event.objects.filter(id=event_id, organizer=request.user).exists()
+ 
+            if event_id and event and str(event_id) != str(event):
+                return False
+ 
+            event_id_to_check = event_id or event
+            return Event.objects.filter(
+                id=event_id_to_check, organizer=request.user
+            ).exists()
         return True
+
     
     def has_object_permission(self, request, view, obj):
         if request.method in permissions.SAFE_METHODS:

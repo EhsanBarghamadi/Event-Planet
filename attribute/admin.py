@@ -12,5 +12,5 @@ class AttributeAdmin(admin.ModelAdmin):
 @admin.register(EventAttributeValue)
 class EventAttributeValueAdmin(admin.ModelAdmin):
     list_display = ['event', 'attribute', 'value']
-    search_fields = ['event']
+    search_fields = ['event__title']
     search_help_text = 'جست و جو بر اساس رویداد'
