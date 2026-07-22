@@ -21,7 +21,7 @@ class RegistrationSerializer(serializers.ModelSerializer):
 
     def validate(self, attrs):
         event = attrs.get('event')
-        required = self.context.get('request')
+        request = self.context.get('request')
 
         if event.status != 'PUBLISHED':
             raise serializers.ValidationError({
@@ -30,7 +30,7 @@ class RegistrationSerializer(serializers.ModelSerializer):
 
         locked_event = Event.objects.select_for_update().get(pk=event.pk)
 
-        check_registration = Registration.objects.filter(event=locked_event, participant=required.user)
+        check_registration = Registration.objects.filter(event=locked_event, participant=request.user)
         if check_registration.exists():
             raise serializers.ValidationError({
                 'participant':'شما قبلا ثبت نام کرده اید'

@@ -2,6 +2,8 @@ import re
 from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from django.contrib.auth import authenticate
+from django.contrib.auth.password_validation import validate_password
+from django.core.exceptions import ValidationError as DjangoValidationError
 from .models import CustomUser
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
@@ -19,9 +21,6 @@ class UserRegisterSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
         fields = ['phone', 'first_name', 'last_name', 'role', 'password']
-        extra_kwargs = {
-            'password': {'write_only': True}
-        }
 
     def validate_role(self, value):
         allowed_roles = [CustomUser.Roles.ORGANIZER, CustomUser.Roles.PARTICIPANT]
@@ -35,6 +34,13 @@ class UserRegisterSerializer(serializers.ModelSerializer):
         match = re.match(pattern, value)
         if not match:
             raise serializers.ValidationError('شماره وارد شده معتبر نیست!')
+        return value
+
+    def validate_password(self, value):
+        try:
+            validate_password(value)
+        except DjangoValidationError as e:
+            raise serializers.ValidationError(list(e.messages))
         return value
     
     def create(self, validated_data):
