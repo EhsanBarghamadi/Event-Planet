@@ -1,6 +1,9 @@
 # Created by https://www.toptal.com/developers/gitignore/api/python,linux,windows,django
 # Edit at https://www.toptal.com/developers/gitignore?templates=python,linux,windows,django
 
+# Postman local config and cache
+.postman/
+
 ### Django ###
 *.log
 *.pot
