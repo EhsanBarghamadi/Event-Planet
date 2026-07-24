@@ -1,0 +1,16 @@
+$kind: http-request
+url: "{{baseUrl}}/api/v1/result/:id/"
+method: GET
+headers:
+  Accept: application/json
+pathVariables:
+  - key: id
+    value: "1791"
+    description: A unique integer value identifying this نتیجه رویداد.
+auth:
+  type: bearer
+  credentials:
+    token: "{{bearerToken}}"
+settings: {}
+examples: ./.resources/v1 result retrieve.resources/examples
+order: 1000

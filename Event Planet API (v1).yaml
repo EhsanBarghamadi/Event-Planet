@@ -1,0 +1,1876 @@
+openapi: 3.0.3
+info:
+  title: Event Planet API
+  version: 1.0.0 (v1)
+  description: Event Planet description
+paths:
+  /api/v1/attribute/:
+    get:
+      operationId: v1_attribute_list
+      parameters:
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Attribute'
+          description: ''
+    post:
+      operationId: v1_attribute_create
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Attribute'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Attribute'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Attribute'
+        required: true
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Attribute'
+          description: ''
+  /api/v1/attribute/{id}/:
+    get:
+      operationId: v1_attribute_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this ویژگی داینامیک.
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Attribute'
+          description: ''
+    put:
+      operationId: v1_attribute_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this ویژگی داینامیک.
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Attribute'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Attribute'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Attribute'
+        required: true
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Attribute'
+          description: ''
+    patch:
+      operationId: v1_attribute_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this ویژگی داینامیک.
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedAttribute'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedAttribute'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedAttribute'
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Attribute'
+          description: ''
+    delete:
+      operationId: v1_attribute_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this ویژگی داینامیک.
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/event/:
+    get:
+      operationId: v1_event_list
+      parameters:
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      - in: query
+        name: status
+        schema:
+          type: string
+          title: وضعیت
+          enum:
+          - CANCELLED
+          - CLOSED
+          - DRAFT
+          - FINISHED
+          - ONGOING
+          - PUBLISHED
+        description: |-
+          * `DRAFT` - پیش‌نویس
+          * `PUBLISHED` - منتشر شده
+          * `ONGOING` - در حال برگزاری
+          * `CLOSED` - بسته شده
+          * `FINISHED` - پایان یافته
+          * `CANCELLED` - لغو شده
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Event'
+          description: ''
+    post:
+      operationId: v1_event_create
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Event'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Event'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Event'
+        required: true
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Event'
+          description: ''
+  /api/v1/event/{id}/:
+    get:
+      operationId: v1_event_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this رویداد.
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Event'
+          description: ''
+    put:
+      operationId: v1_event_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this رویداد.
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Event'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Event'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Event'
+        required: true
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Event'
+          description: ''
+    patch:
+      operationId: v1_event_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this رویداد.
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedEvent'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedEvent'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedEvent'
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Event'
+          description: ''
+    delete:
+      operationId: v1_event_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this رویداد.
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/event/{id}/participants/:
+    get:
+      operationId: v1_event_participants_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this رویداد.
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Event'
+          description: ''
+  /api/v1/eventattributevalue/:
+    get:
+      operationId: v1_eventattributevalue_list
+      parameters:
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/EventAttributeValue'
+          description: ''
+    post:
+      operationId: v1_eventattributevalue_create
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EventAttributeValue'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/EventAttributeValue'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/EventAttributeValue'
+        required: true
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EventAttributeValue'
+          description: ''
+  /api/v1/eventattributevalue/{id}/:
+    get:
+      operationId: v1_eventattributevalue_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this مقدار ویژگی رویداد.
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EventAttributeValue'
+          description: ''
+    put:
+      operationId: v1_eventattributevalue_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this مقدار ویژگی رویداد.
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EventAttributeValue'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/EventAttributeValue'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/EventAttributeValue'
+        required: true
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EventAttributeValue'
+          description: ''
+    patch:
+      operationId: v1_eventattributevalue_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this مقدار ویژگی رویداد.
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedEventAttributeValue'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedEventAttributeValue'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedEventAttributeValue'
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EventAttributeValue'
+          description: ''
+    delete:
+      operationId: v1_eventattributevalue_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this مقدار ویژگی رویداد.
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/eventstage/:
+    get:
+      operationId: v1_eventstage_list
+      parameters:
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/EventStage'
+          description: ''
+    post:
+      operationId: v1_eventstage_create
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EventStage'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/EventStage'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/EventStage'
+        required: true
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EventStage'
+          description: ''
+  /api/v1/eventstage/{id}/:
+    get:
+      operationId: v1_eventstage_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this مرحله رویداد.
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EventStage'
+          description: ''
+    put:
+      operationId: v1_eventstage_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this مرحله رویداد.
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EventStage'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/EventStage'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/EventStage'
+        required: true
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EventStage'
+          description: ''
+    patch:
+      operationId: v1_eventstage_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this مرحله رویداد.
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedEventStage'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedEventStage'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedEventStage'
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EventStage'
+          description: ''
+    delete:
+      operationId: v1_eventstage_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this مرحله رویداد.
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/feedback/:
+    get:
+      operationId: v1_feedback_list
+      parameters:
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Feedback'
+          description: ''
+    post:
+      operationId: v1_feedback_create
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Feedback'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Feedback'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Feedback'
+        required: true
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Feedback'
+          description: ''
+  /api/v1/feedback/{id}/:
+    get:
+      operationId: v1_feedback_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this بازخورد.
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Feedback'
+          description: ''
+    put:
+      operationId: v1_feedback_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this بازخورد.
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Feedback'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Feedback'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Feedback'
+        required: true
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Feedback'
+          description: ''
+    patch:
+      operationId: v1_feedback_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this بازخورد.
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedFeedback'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedFeedback'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedFeedback'
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Feedback'
+          description: ''
+    delete:
+      operationId: v1_feedback_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this بازخورد.
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/registration/:
+    get:
+      operationId: v1_registration_list
+      parameters:
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Registration'
+          description: ''
+    post:
+      operationId: v1_registration_create
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Registration'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Registration'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Registration'
+        required: true
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Registration'
+          description: ''
+  /api/v1/registration/{id}/:
+    get:
+      operationId: v1_registration_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this ثبت‌نام رویداد.
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Registration'
+          description: ''
+    put:
+      operationId: v1_registration_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this ثبت‌نام رویداد.
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Registration'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Registration'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Registration'
+        required: true
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Registration'
+          description: ''
+    patch:
+      operationId: v1_registration_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this ثبت‌نام رویداد.
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedRegistration'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedRegistration'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedRegistration'
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Registration'
+          description: ''
+    delete:
+      operationId: v1_registration_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this ثبت‌نام رویداد.
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/result/:
+    get:
+      operationId: v1_result_list
+      parameters:
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Result'
+          description: ''
+    post:
+      operationId: v1_result_create
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Result'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Result'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Result'
+        required: true
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Result'
+          description: ''
+  /api/v1/result/{id}/:
+    get:
+      operationId: v1_result_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this نتیجه رویداد.
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Result'
+          description: ''
+    put:
+      operationId: v1_result_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this نتیجه رویداد.
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Result'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Result'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Result'
+        required: true
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Result'
+          description: ''
+    patch:
+      operationId: v1_result_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this نتیجه رویداد.
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedResult'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedResult'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedResult'
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Result'
+          description: ''
+    delete:
+      operationId: v1_result_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this نتیجه رویداد.
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/user/api/auth/logout/:
+    post:
+      operationId: v1_user_api_auth_logout_create
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RefreshToken'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/RefreshToken'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/RefreshToken'
+        required: true
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '205':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LogoutSuccessResponse'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LogoutErrorResponse'
+          description: ''
+  /api/v1/user/api/token/:
+    post:
+      operationId: v1_user_api_token_create
+      description: |-
+        Takes a set of user credentials and returns an access and refresh JSON web
+        token pair to prove the authentication of those credentials.
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MyTokenObtainPair'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/MyTokenObtainPair'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/MyTokenObtainPair'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MyTokenObtainPair'
+          description: ''
+  /api/v1/user/login/:
+    post:
+      operationId: v1_user_login_create
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserLogin'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UserLogin'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UserLogin'
+        required: true
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserLogin'
+          description: ''
+  /api/v1/user/logout/:
+    post:
+      operationId: v1_user_logout_create
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SessionLogoutResponse'
+          description: ''
+  /api/v1/user/register/:
+    post:
+      operationId: v1_user_register_create
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserRegister'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UserRegister'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UserRegister'
+        required: true
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserRegister'
+          description: ''
+  /api/token/refresh/:
+    post:
+      operationId: token_refresh_create
+      description: |-
+        Takes a refresh type JSON web token and returns an access type JSON web
+        token if the refresh token is valid.
+      tags:
+      - token
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TokenRefresh'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TokenRefresh'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TokenRefresh'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenRefresh'
+          description: ''
+components:
+  schemas:
+    Attribute:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        slug:
+          type: string
+          title: اسلاگ
+          pattern: ^[-\w]+$
+          maxLength: 255
+        name:
+          type: string
+          title: نام ویژگی
+          maxLength: 100
+        data_type:
+          allOf:
+          - $ref: '#/components/schemas/DataTypeEnum'
+          title: نوع داده‌ای
+      required:
+      - data_type
+      - id
+      - name
+      - slug
+    DataTypeEnum:
+      enum:
+      - TEXT
+      - INTEGER
+      - BOOLEAN
+      type: string
+      description: |-
+        * `TEXT` - متنی
+        * `INTEGER` - عددی
+        * `BOOLEAN` - بولین (بله/خیر)
+    Event:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        organizer:
+          type: integer
+          readOnly: true
+          title: برگزارکننده
+        title:
+          type: string
+          title: عنوان رویداد
+          maxLength: 255
+        description:
+          type: string
+          nullable: true
+          title: توضیحات رویداد
+        status:
+          allOf:
+          - $ref: '#/components/schemas/StatusEnum'
+          title: وضعیت
+        capacity:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: 0
+          format: int64
+          title: ظرفیت
+        start_date:
+          type: string
+          format: date-time
+          title: تاریخ شروع
+        end_date:
+          type: string
+          format: date-time
+          title: تاریخ پایان
+        attribute_values:
+          type: array
+          items:
+            $ref: '#/components/schemas/EventAttributeValue'
+          readOnly: true
+      required:
+      - attribute_values
+      - capacity
+      - end_date
+      - id
+      - organizer
+      - start_date
+      - title
+    EventAttributeValue:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        event:
+          type: integer
+          title: رویداد
+        attribute:
+          type: integer
+          title: ویژگی
+        value_text:
+          type: string
+          nullable: true
+          title: مقدار متنی
+        value_int:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: -9223372036854775808
+          format: int64
+          nullable: true
+          title: مقدار عددی
+        value_bool:
+          type: boolean
+          nullable: true
+          title: مقدار بولین
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+          title: تاریخ ایجاد
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+          title: تاریخ به‌روزرسانی
+      required:
+      - attribute
+      - created_at
+      - event
+      - id
+      - updated_at
+    EventStage:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        event:
+          allOf:
+          - $ref: '#/components/schemas/Event'
+          readOnly: true
+        event_id:
+          type: integer
+          writeOnly: true
+        title:
+          type: string
+          title: عنوان مرحله
+          maxLength: 255
+        description:
+          type: string
+          nullable: true
+          title: توضیحات مرحله
+        start_time:
+          type: string
+          format: date-time
+          title: زمان شروع مرحله
+        end_time:
+          type: string
+          format: date-time
+          title: زمان پایان مرحله
+        order:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: 0
+          format: int64
+          title: ترتیب
+      required:
+      - end_time
+      - event
+      - id
+      - order
+      - start_time
+      - title
+    Feedback:
+      type: object
+      properties:
+        participant:
+          type: integer
+          readOnly: true
+          title: نویسنده نظر
+        event:
+          allOf:
+          - $ref: '#/components/schemas/Event'
+          readOnly: true
+        event_id:
+          type: integer
+          writeOnly: true
+        rating:
+          type: integer
+          maximum: 5
+          minimum: 1
+          title: امتیاز (از ۱ تا ۵)
+        comment:
+          type: string
+          nullable: true
+          title: متن نظر
+      required:
+      - event
+      - event_id
+      - participant
+      - rating
+    LogoutErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+      required:
+      - error
+    LogoutSuccessResponse:
+      type: object
+      properties:
+        message:
+          type: string
+      required:
+      - message
+    MyTokenObtainPair:
+      type: object
+      properties:
+        phone:
+          type: string
+          writeOnly: true
+        password:
+          type: string
+          writeOnly: true
+      required:
+      - password
+      - phone
+    PatchedAttribute:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        slug:
+          type: string
+          title: اسلاگ
+          pattern: ^[-\w]+$
+          maxLength: 255
+        name:
+          type: string
+          title: نام ویژگی
+          maxLength: 100
+        data_type:
+          allOf:
+          - $ref: '#/components/schemas/DataTypeEnum'
+          title: نوع داده‌ای
+    PatchedEvent:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        organizer:
+          type: integer
+          readOnly: true
+          title: برگزارکننده
+        title:
+          type: string
+          title: عنوان رویداد
+          maxLength: 255
+        description:
+          type: string
+          nullable: true
+          title: توضیحات رویداد
+        status:
+          allOf:
+          - $ref: '#/components/schemas/StatusEnum'
+          title: وضعیت
+        capacity:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: 0
+          format: int64
+          title: ظرفیت
+        start_date:
+          type: string
+          format: date-time
+          title: تاریخ شروع
+        end_date:
+          type: string
+          format: date-time
+          title: تاریخ پایان
+        attribute_values:
+          type: array
+          items:
+            $ref: '#/components/schemas/EventAttributeValue'
+          readOnly: true
+    PatchedEventAttributeValue:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        event:
+          type: integer
+          title: رویداد
+        attribute:
+          type: integer
+          title: ویژگی
+        value_text:
+          type: string
+          nullable: true
+          title: مقدار متنی
+        value_int:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: -9223372036854775808
+          format: int64
+          nullable: true
+          title: مقدار عددی
+        value_bool:
+          type: boolean
+          nullable: true
+          title: مقدار بولین
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+          title: تاریخ ایجاد
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+          title: تاریخ به‌روزرسانی
+    PatchedEventStage:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        event:
+          allOf:
+          - $ref: '#/components/schemas/Event'
+          readOnly: true
+        event_id:
+          type: integer
+          writeOnly: true
+        title:
+          type: string
+          title: عنوان مرحله
+          maxLength: 255
+        description:
+          type: string
+          nullable: true
+          title: توضیحات مرحله
+        start_time:
+          type: string
+          format: date-time
+          title: زمان شروع مرحله
+        end_time:
+          type: string
+          format: date-time
+          title: زمان پایان مرحله
+        order:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: 0
+          format: int64
+          title: ترتیب
+    PatchedFeedback:
+      type: object
+      properties:
+        participant:
+          type: integer
+          readOnly: true
+          title: نویسنده نظر
+        event:
+          allOf:
+          - $ref: '#/components/schemas/Event'
+          readOnly: true
+        event_id:
+          type: integer
+          writeOnly: true
+        rating:
+          type: integer
+          maximum: 5
+          minimum: 1
+          title: امتیاز (از ۱ تا ۵)
+        comment:
+          type: string
+          nullable: true
+          title: متن نظر
+    PatchedRegistration:
+      type: object
+      properties:
+        participant:
+          type: integer
+          readOnly: true
+          title: شرکت‌کننده
+        event:
+          allOf:
+          - $ref: '#/components/schemas/Event'
+          readOnly: true
+        event_id:
+          type: integer
+          writeOnly: true
+    PatchedResult:
+      type: object
+      properties:
+        event:
+          allOf:
+          - $ref: '#/components/schemas/Event'
+          readOnly: true
+        event_id:
+          type: integer
+          writeOnly: true
+        participant:
+          allOf:
+          - $ref: '#/components/schemas/UserReadOnly'
+          readOnly: true
+        participant_id:
+          type: integer
+          writeOnly: true
+        achievement:
+          type: string
+          title: 'دستاورد یا رتبه (مثلاً: رتبه اول، شایسته تقدیر)'
+          maxLength: 255
+    RefreshToken:
+      type: object
+      properties:
+        refresh:
+          type: string
+          description: توکن ریفرش برای بلک‌لیست شدن
+      required:
+      - refresh
+    Registration:
+      type: object
+      properties:
+        participant:
+          type: integer
+          readOnly: true
+          title: شرکت‌کننده
+        event:
+          allOf:
+          - $ref: '#/components/schemas/Event'
+          readOnly: true
+        event_id:
+          type: integer
+          writeOnly: true
+      required:
+      - event
+      - event_id
+      - participant
+    Result:
+      type: object
+      properties:
+        event:
+          allOf:
+          - $ref: '#/components/schemas/Event'
+          readOnly: true
+        event_id:
+          type: integer
+          writeOnly: true
+        participant:
+          allOf:
+          - $ref: '#/components/schemas/UserReadOnly'
+          readOnly: true
+        participant_id:
+          type: integer
+          writeOnly: true
+        achievement:
+          type: string
+          title: 'دستاورد یا رتبه (مثلاً: رتبه اول، شایسته تقدیر)'
+          maxLength: 255
+      required:
+      - achievement
+      - event
+      - event_id
+      - participant
+      - participant_id
+    RoleEnum:
+      enum:
+      - ORGANIZER
+      - PARTICIPANT
+      type: string
+      description: |-
+        * `ORGANIZER` - Organizer
+        * `PARTICIPANT` - Participant
+    SessionLogoutResponse:
+      type: object
+      properties:
+        detail:
+          type: string
+      required:
+      - detail
+    StatusEnum:
+      enum:
+      - DRAFT
+      - PUBLISHED
+      - ONGOING
+      - CLOSED
+      - FINISHED
+      - CANCELLED
+      type: string
+      description: |-
+        * `DRAFT` - پیش‌نویس
+        * `PUBLISHED` - منتشر شده
+        * `ONGOING` - در حال برگزاری
+        * `CLOSED` - بسته شده
+        * `FINISHED` - پایان یافته
+        * `CANCELLED` - لغو شده
+    TokenRefresh:
+      type: object
+      properties:
+        access:
+          type: string
+          readOnly: true
+        refresh:
+          type: string
+          writeOnly: true
+      required:
+      - access
+      - refresh
+    UserLogin:
+      type: object
+      properties:
+        phone:
+          type: string
+          writeOnly: true
+        password:
+          type: string
+          writeOnly: true
+      required:
+      - password
+      - phone
+    UserReadOnly:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        phone:
+          type: string
+          title: شماره
+          description: شماره باید منحصر به فرد باشد.
+          maxLength: 20
+        first_name:
+          type: string
+          title: نام
+          maxLength: 30
+        last_name:
+          type: string
+          title: نام خانوادگی
+          maxLength: 30
+        role:
+          allOf:
+          - $ref: '#/components/schemas/RoleEnum'
+          title: ' نقش'
+      required:
+      - first_name
+      - id
+      - last_name
+      - phone
+    UserRegister:
+      type: object
+      properties:
+        phone:
+          type: string
+          title: شماره
+          description: شماره باید منحصر به فرد باشد.
+          maxLength: 20
+        first_name:
+          type: string
+          title: نام
+          maxLength: 30
+        last_name:
+          type: string
+          title: نام خانوادگی
+          maxLength: 30
+        role:
+          allOf:
+          - $ref: '#/components/schemas/RoleEnum'
+          title: ' نقش'
+        password:
+          type: string
+          writeOnly: true
+      required:
+      - first_name
+      - last_name
+      - password
+      - phone
+  securitySchemes:
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: sessionid
+    jwtAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

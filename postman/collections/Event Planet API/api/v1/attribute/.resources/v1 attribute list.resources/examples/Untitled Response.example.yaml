@@ -1,0 +1,37 @@
+$kind: http-example
+request:
+  url: "{{baseUrl}}/api/v1/attribute/?search=string"
+  method: GET
+  headers:
+    - key: Accept
+      value: application/json
+    - key: Authorization
+      value: Bearer <token>
+      description: "Added as a part of security scheme: bearer"
+  queryParams:
+    - key: search
+      value: string
+      description: A search term.
+response:
+  statusCode: 200
+  statusText: OK
+  headers:
+    Content-Type: application/json
+  body:
+    type: json
+    content: |-
+      [
+        {
+          "data_type": "INTEGER",
+          "id": 6581,
+          "name": "string",
+          "slug": "Hf8WSDdH"
+        },
+        {
+          "data_type": "BOOLEAN",
+          "id": 2678,
+          "name": "string",
+          "slug": "x"
+        }
+      ]
+order: 1000

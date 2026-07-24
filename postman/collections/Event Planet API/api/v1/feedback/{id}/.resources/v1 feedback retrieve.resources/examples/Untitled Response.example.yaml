@@ -1,0 +1,58 @@
+$kind: http-example
+request:
+  url: "{{baseUrl}}/api/v1/feedback/:id/"
+  method: GET
+  headers:
+    - key: Accept
+      value: application/json
+    - key: Authorization
+      value: Bearer <token>
+      description: "Added as a part of security scheme: bearer"
+  pathVariables:
+    id: ""
+response:
+  statusCode: 200
+  statusText: OK
+  headers:
+    Content-Type: application/json
+  body:
+    type: json
+    content: |-
+      {
+        "event": {
+          "attribute_values": [
+            {
+              "attribute": 8174,
+              "created_at": "1973-10-24T09:20:49.943Z",
+              "event": 3470,
+              "id": 3946,
+              "updated_at": "1960-10-04T06:56:34.376Z",
+              "value_text": "string",
+              "value_int": 3736586027487523000,
+              "value_bool": true
+            },
+            {
+              "attribute": 9539,
+              "created_at": "2009-03-13T07:40:27.359Z",
+              "event": 9476,
+              "id": 8094,
+              "updated_at": "1988-12-24T14:24:13.400Z",
+              "value_text": "string",
+              "value_int": 7574146535054082000,
+              "value_bool": true
+            }
+          ],
+          "capacity": 8849264144624812000,
+          "end_date": "1957-06-27T22:19:18.116Z",
+          "id": 5735,
+          "organizer": 8057,
+          "start_date": "1952-12-26T19:20:02.667Z",
+          "title": "string",
+          "description": "string",
+          "status": "CLOSED"
+        },
+        "participant": 5341,
+        "rating": 1,
+        "comment": "string"
+      }
+order: 1000

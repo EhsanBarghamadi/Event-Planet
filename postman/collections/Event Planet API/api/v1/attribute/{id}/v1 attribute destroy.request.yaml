@@ -1,0 +1,14 @@
+$kind: http-request
+url: "{{baseUrl}}/api/v1/attribute/:id/"
+method: DELETE
+pathVariables:
+  - key: id
+    value: "1791"
+    description: A unique integer value identifying this ویژگی داینامیک.
+auth:
+  type: bearer
+  credentials:
+    token: "{{bearerToken}}"
+settings: {}
+examples: ./.resources/v1 attribute destroy.resources/examples
+order: 4000

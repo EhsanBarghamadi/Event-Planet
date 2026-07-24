@@ -1,0 +1,34 @@
+$kind: http-request
+url: "{{baseUrl}}/api/v1/feedback/:id/"
+method: PUT
+headers:
+  Content-Type: application/json
+  Accept: application/json
+pathVariables:
+  - key: id
+    value: "1791"
+    description: A unique integer value identifying this بازخورد.
+body:
+  type: json
+  content: |-
+    {
+      "event": {
+        "capacity": 5989833853460072000,
+        "end_date": "2009-04-19T10:51:45.125Z",
+        "start_date": "2021-09-24T05:26:43.006Z",
+        "title": "string",
+        "description": "string",
+        "status": "ONGOING",
+        "attribute_values": true
+      },
+      "event_id": 3739,
+      "rating": 1,
+      "comment": "string"
+    }
+auth:
+  type: bearer
+  credentials:
+    token: "{{bearerToken}}"
+settings: {}
+examples: ./.resources/v1 feedback update.resources/examples
+order: 2000

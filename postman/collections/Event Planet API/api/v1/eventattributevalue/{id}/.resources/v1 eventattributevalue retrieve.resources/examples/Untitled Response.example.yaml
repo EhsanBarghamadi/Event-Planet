@@ -1,0 +1,31 @@
+$kind: http-example
+request:
+  url: "{{baseUrl}}/api/v1/eventattributevalue/:id/"
+  method: GET
+  headers:
+    - key: Accept
+      value: application/json
+    - key: Authorization
+      value: Bearer <token>
+      description: "Added as a part of security scheme: bearer"
+  pathVariables:
+    id: ""
+response:
+  statusCode: 200
+  statusText: OK
+  headers:
+    Content-Type: application/json
+  body:
+    type: json
+    content: |-
+      {
+        "attribute": 7728,
+        "created_at": "1974-04-08T21:53:29.257Z",
+        "event": 2328,
+        "id": 8245,
+        "updated_at": "1949-09-17T14:21:54.658Z",
+        "value_text": "string",
+        "value_int": -1043677302696706000,
+        "value_bool": true
+      }
+order: 1000

@@ -1,0 +1,15 @@
+workspace:
+  id: 8519deb0-6eb6-4ef4-851d-312ca4e0d8d8
+cloudResources:
+  collections:
+    ../postman/collections/Event Planet API: 56734062-bd5b522e-83eb-4c2e-92cb-4158ad28d9c6
+  environments:
+    ../postman/environments/Event Planet Local.environment.yaml: 56734062-359a4f20-8fca-426b-82fb-63682749a206
+  specs:
+    ../Event Planet API (v1).yaml: 763b451a-150f-4cef-8f86-94d9faaa7cd6
+localResources:
+  specs:
+    - ../Event Planet API (v1).yaml
+resourceNameMappings:
+  specs:
+    - ../Event Planet API (v1).yaml: Event Planet API

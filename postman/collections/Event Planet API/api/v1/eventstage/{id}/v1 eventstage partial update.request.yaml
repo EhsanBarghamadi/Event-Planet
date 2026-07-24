@@ -1,0 +1,60 @@
+$kind: http-request
+url: "{{baseUrl}}/api/v1/eventstage/:id/"
+method: PATCH
+headers:
+  Content-Type: application/json
+  Accept: application/json
+pathVariables:
+  - key: id
+    value: "1791"
+    description: A unique integer value identifying this مرحله رویداد.
+body:
+  type: json
+  content: |-
+    {
+      "event": {
+        "attribute_values": [
+          {
+            "attribute": 5165,
+            "created_at": "1949-02-22T06:44:00.334Z",
+            "event": 6332,
+            "id": 333,
+            "updated_at": "1966-12-20T20:21:08.129Z",
+            "value_text": "string",
+            "value_int": 2100540522509869000,
+            "value_bool": true
+          },
+          {
+            "attribute": 5623,
+            "created_at": "1954-01-15T07:50:41.742Z",
+            "event": 6191,
+            "id": 6881,
+            "updated_at": "1990-02-24T09:42:13.043Z",
+            "value_text": "string",
+            "value_int": -3182895080503447600,
+            "value_bool": false
+          }
+        ],
+        "capacity": 959462760504604700,
+        "end_date": "2006-03-13T04:02:24.104Z",
+        "id": 4433,
+        "organizer": 928,
+        "start_date": "2012-11-23T22:24:21.079Z",
+        "title": "string",
+        "description": "string",
+        "status": "PUBLISHED"
+      },
+      "event_id": 4325,
+      "title": "string",
+      "description": "string",
+      "start_time": "2002-06-26T00:54:03.083Z",
+      "end_time": "1958-07-31T08:04:24.405Z",
+      "order": 8806941637098748000
+    }
+auth:
+  type: bearer
+  credentials:
+    token: "{{bearerToken}}"
+settings: {}
+examples: ./.resources/v1 eventstage partial update.resources/examples
+order: 3000

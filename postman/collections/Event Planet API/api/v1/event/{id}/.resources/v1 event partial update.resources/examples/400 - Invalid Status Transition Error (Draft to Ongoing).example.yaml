@@ -1,0 +1,40 @@
+$kind: http-example
+request:
+  url: "{{baseUrl}}/api/v1/event/:id/"
+  method: PATCH
+  headers:
+    Content-Type: application/json
+    Accept: application/json
+  pathVariables:
+    - key: id
+      value: "8"
+      description: A unique integer value identifying this رویداد.
+  body:
+    type: json
+    content: |-
+      {
+        "status": "ONGOING"
+      }
+response:
+  statusCode: 400
+  statusText: Bad Request
+  headers:
+    Date: Wed, 22 Jul 2026 17:19:34 GMT
+    Server: WSGIServer/0.2 CPython/3.12.13
+    Content-Type: application/json
+    Vary: Accept
+    Allow: GET, PUT, PATCH, DELETE, HEAD, OPTIONS
+    X-Frame-Options: DENY
+    Content-Length: "118"
+    X-Content-Type-Options: nosniff
+    Referrer-Policy: same-origin
+    Cross-Origin-Opener-Policy: same-origin
+  body:
+    type: text
+    content: |-
+      {
+          "status": [
+              "تغییر وضعیت از DRAFT به ONGOING مجاز نیستوضعیت مجاز PUBLISHED, CANCELLED"
+          ]
+      }
+order: 3000

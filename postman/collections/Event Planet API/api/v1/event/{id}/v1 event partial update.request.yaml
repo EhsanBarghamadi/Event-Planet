@@ -1,0 +1,28 @@
+$kind: http-request
+url: "{{baseUrl}}/api/v1/event/:id/"
+method: PATCH
+headers:
+  Content-Type: application/json
+  Accept: application/json
+pathVariables:
+  - key: id
+    value: "1791"
+    description: A unique integer value identifying this رویداد.
+body:
+  type: json
+  content: |-
+    {
+      "title": "string",
+      "description": "string",
+      "status": "ONGOING",
+      "capacity": 8146000759280024000,
+      "start_date": "1964-05-01T02:35:20.277Z",
+      "end_date": "1961-09-11T04:19:28.817Z"
+    }
+auth:
+  type: bearer
+  credentials:
+    token: "{{bearerToken}}"
+settings: {}
+examples: ./.resources/v1 event partial update.resources/examples
+order: 4000

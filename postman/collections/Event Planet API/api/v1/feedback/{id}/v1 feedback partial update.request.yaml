@@ -1,0 +1,57 @@
+$kind: http-request
+url: "{{baseUrl}}/api/v1/feedback/:id/"
+method: PATCH
+headers:
+  Content-Type: application/json
+  Accept: application/json
+pathVariables:
+  - key: id
+    value: "1791"
+    description: A unique integer value identifying this بازخورد.
+body:
+  type: json
+  content: |-
+    {
+      "event": {
+        "attribute_values": [
+          {
+            "attribute": 2290,
+            "created_at": "2024-02-29T08:02:22.717Z",
+            "event": 3022,
+            "id": 3275,
+            "updated_at": "2024-08-17T13:26:43.695Z",
+            "value_text": "string",
+            "value_int": -7809754351017230000,
+            "value_bool": false
+          },
+          {
+            "attribute": 1230,
+            "created_at": "1949-07-03T10:21:09.467Z",
+            "event": 386,
+            "id": 1160,
+            "updated_at": "2001-06-06T15:23:14.950Z",
+            "value_text": "string",
+            "value_int": 8169836706990834000,
+            "value_bool": false
+          }
+        ],
+        "capacity": 2441425772404261000,
+        "end_date": "1973-11-21T12:52:15.395Z",
+        "id": 9147,
+        "organizer": 7509,
+        "start_date": "1971-04-24T18:10:14.773Z",
+        "title": "string",
+        "description": "string",
+        "status": "DRAFT"
+      },
+      "event_id": 9694,
+      "rating": 4,
+      "comment": "string"
+    }
+auth:
+  type: bearer
+  credentials:
+    token: "{{bearerToken}}"
+settings: {}
+examples: ./.resources/v1 feedback partial update.resources/examples
+order: 3000

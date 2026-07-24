@@ -1,0 +1,5 @@
+name: Event Planet Local
+values:
+  - key: baseUrl
+    value: ''
+color: 60

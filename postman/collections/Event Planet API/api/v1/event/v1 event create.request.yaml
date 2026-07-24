@@ -1,0 +1,25 @@
+$kind: http-request
+url: "{{baseUrl}}/api/v1/event/"
+method: POST
+headers:
+  Content-Type: application/json
+  Accept: application/json
+body:
+  type: json
+  content: |-
+    {
+      "capacity": 2633973839084822500,
+      "end_date": "1984-05-11T13:45:32.643Z",
+      "start_date": "2018-04-07T11:44:08.280Z",
+      "title": "string",
+      "description": "string",
+      "status": "CLOSED",
+      "attribute_values": 6743.372923933082
+    }
+auth:
+  type: bearer
+  credentials:
+    token: "{{bearerToken}}"
+settings: {}
+examples: ./.resources/v1 event create.resources/examples
+order: 3000

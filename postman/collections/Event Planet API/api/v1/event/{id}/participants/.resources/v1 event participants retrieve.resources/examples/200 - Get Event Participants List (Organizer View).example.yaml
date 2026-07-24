@@ -1,0 +1,40 @@
+$kind: http-example
+request:
+  url: "{{baseUrl}}/api/v1/event/:id/participants/"
+  method: GET
+  headers:
+    Accept: application/json
+  pathVariables:
+    - key: id
+      value: "9"
+      description: A unique integer value identifying this رویداد.
+response:
+  statusCode: 200
+  statusText: OK
+  headers:
+    Date: Fri, 24 Jul 2026 04:24:05 GMT
+    Server: WSGIServer/0.2 CPython/3.12.13
+    Content-Type: application/json
+    Vary: Accept
+    Allow: GET, HEAD, OPTIONS
+    X-Frame-Options: DENY
+    Content-Length: "161"
+    X-Content-Type-Options: nosniff
+    Referrer-Policy: same-origin
+    Cross-Origin-Opener-Policy: same-origin
+  body:
+    type: text
+    content: |-
+      [
+          {
+              "participant": {
+                  "id": 8,
+                  "phone": "09222222222",
+                  "first_name": "فرید",
+                  "last_name": "فریدی",
+                  "role": "PARTICIPANT"
+              },
+              "created_at": "2026-07-23T16:23:19.887424Z"
+          }
+      ]
+order: 2000

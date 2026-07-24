@@ -1,0 +1,33 @@
+$kind: http-request
+url: "{{baseUrl}}/api/v1/eventstage/"
+method: POST
+headers:
+  Content-Type: application/json
+  Accept: application/json
+body:
+  type: json
+  content: |-
+    {
+      "end_time": "1993-07-18T12:50:58.048Z",
+      "event": {
+        "capacity": 6458317216978846000,
+        "end_date": "2004-03-07T06:39:03.038Z",
+        "start_date": "1963-01-27T23:16:13.172Z",
+        "title": "string",
+        "description": "string",
+        "status": "CLOSED",
+        "attribute_values": 4210.312650375882
+      },
+      "order": 9097882612568498000,
+      "start_time": "1990-07-12T02:54:53.468Z",
+      "title": "string",
+      "event_id": 9751,
+      "description": "string"
+    }
+auth:
+  type: bearer
+  credentials:
+    token: "{{bearerToken}}"
+settings: {}
+examples: ./.resources/v1 eventstage create.resources/examples
+order: 3000

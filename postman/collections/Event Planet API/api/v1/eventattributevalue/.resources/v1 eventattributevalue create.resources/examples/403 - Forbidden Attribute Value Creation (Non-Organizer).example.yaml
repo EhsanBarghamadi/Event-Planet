@@ -1,0 +1,36 @@
+$kind: http-example
+request:
+  url: "{{baseUrl}}/api/v1/eventattributevalue/"
+  method: POST
+  headers:
+    Content-Type: application/json
+    Accept: application/json
+  body:
+    type: json
+    content: |-
+      {
+        "attribute": 9,
+        "event": 7,
+        "value_text": "Ahmad Eslami"
+      }
+response:
+  statusCode: 403
+  statusText: Forbidden
+  headers:
+    Date: Thu, 23 Jul 2026 01:50:49 GMT
+    Server: WSGIServer/0.2 CPython/3.12.13
+    Content-Type: application/json
+    Vary: Accept
+    Allow: GET, POST, HEAD, OPTIONS
+    X-Frame-Options: DENY
+    Content-Length: "63"
+    X-Content-Type-Options: nosniff
+    Referrer-Policy: same-origin
+    Cross-Origin-Opener-Policy: same-origin
+  body:
+    type: text
+    content: |-
+      {
+          "detail": "You do not have permission to perform this action."
+      }
+order: 2000

@@ -1,0 +1,40 @@
+$kind: http-example
+request:
+  url: "{{baseUrl}}/api/v1/user/register/"
+  method: POST
+  headers:
+    Content-Type: application/json
+    Accept: application/json
+  body:
+    type: json
+    content: |
+      {
+        "first_name": "احسان",
+        "last_name": "احسانی",
+        "password": "ehsan123",
+        "phone": "09333333333",
+        "role": "STAFF"
+      }
+response:
+  statusCode: 400
+  statusText: Bad Request
+  headers:
+    Date: Wed, 22 Jul 2026 15:22:39 GMT
+    Server: WSGIServer/0.2 CPython/3.12.13
+    Content-Type: application/json
+    Vary: Accept, Cookie
+    Allow: POST, OPTIONS
+    X-Frame-Options: DENY
+    Content-Length: "90"
+    X-Content-Type-Options: nosniff
+    Referrer-Policy: same-origin
+    Cross-Origin-Opener-Policy: same-origin
+  body:
+    type: text
+    content: |-
+      {
+          "role": [
+              "انتخاب این نقش در ثبت\u200cنام عمومی مجاز نیست."
+          ]
+      }
+order: 4000

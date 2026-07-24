@@ -1,0 +1,19 @@
+$kind: http-request
+description: |-
+  Takes a set of user credentials and returns an access and refresh JSON web
+  token pair to prove the authentication of those credentials.
+url: "{{baseUrl}}/api/v1/user/token/"
+method: POST
+headers:
+  Content-Type: application/json
+  Accept: application/json
+body:
+  type: json
+  content: |-
+    {
+      "phone": "string",
+      "password": "string"
+    }
+settings: {}
+examples: ./.resources/v1 user token create.resources/examples
+order: 3000

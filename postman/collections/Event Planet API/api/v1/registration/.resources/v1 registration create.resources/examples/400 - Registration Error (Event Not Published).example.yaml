@@ -1,0 +1,36 @@
+$kind: http-example
+request:
+  url: "{{baseUrl}}/api/v1/registration/"
+  method: POST
+  headers:
+    Content-Type: application/json
+    Accept: application/json
+  body:
+    type: json
+    content: |-
+      {
+        "event_id": 7
+      }
+response:
+  statusCode: 400
+  statusText: Bad Request
+  headers:
+    Date: Thu, 23 Jul 2026 14:59:41 GMT
+    Server: WSGIServer/0.2 CPython/3.12.13
+    Content-Type: application/json
+    Vary: Accept
+    Allow: GET, POST
+    X-Frame-Options: DENY
+    Content-Length: "102"
+    X-Content-Type-Options: nosniff
+    Referrer-Policy: same-origin
+    Cross-Origin-Opener-Policy: same-origin
+  body:
+    type: text
+    content: |-
+      {
+          "event": [
+              "ثبت نام فقط روی رویداد های منتشر شده انجام می شود"
+          ]
+      }
+order: 3000

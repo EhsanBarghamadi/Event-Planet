@@ -1,0 +1,45 @@
+$kind: http-example
+request:
+  url: "{{baseUrl}}/api/v1/eventattributevalue/?search=string"
+  method: GET
+  headers:
+    - key: Accept
+      value: application/json
+    - key: Authorization
+      value: Bearer <token>
+      description: "Added as a part of security scheme: bearer"
+  queryParams:
+    - key: search
+      value: string
+      description: A search term.
+response:
+  statusCode: 200
+  statusText: OK
+  headers:
+    Content-Type: application/json
+  body:
+    type: json
+    content: |-
+      [
+        {
+          "attribute": 1917,
+          "created_at": "1987-11-26T19:37:02.378Z",
+          "event": 6553,
+          "id": 2995,
+          "updated_at": "2012-01-18T04:00:48.416Z",
+          "value_text": "string",
+          "value_int": -2893376239394820000,
+          "value_bool": true
+        },
+        {
+          "attribute": 8184,
+          "created_at": "1953-03-21T18:44:08.521Z",
+          "event": 4920,
+          "id": 6738,
+          "updated_at": "1975-04-23T03:34:02.062Z",
+          "value_text": "string",
+          "value_int": -9000848519880057000,
+          "value_bool": false
+        }
+      ]
+order: 1000

@@ -1,0 +1,4 @@
+$kind: collection
+description: Event Planet description
+variables:
+  baseUrl: /

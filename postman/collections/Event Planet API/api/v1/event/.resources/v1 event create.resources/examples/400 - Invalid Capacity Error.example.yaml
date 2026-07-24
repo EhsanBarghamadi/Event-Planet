@@ -1,0 +1,41 @@
+$kind: http-example
+request:
+  url: "{{baseUrl}}/api/v1/event/"
+  method: POST
+  headers:
+    Content-Type: application/json
+    Accept: application/json
+  body:
+    type: json
+    content: |-
+      {
+        "capacity": 0,
+        "end_date": "2026-12-20T18:00:00Z",
+        "start_date": "2026-11-01T09:00:00Z",
+        "title": "همایش تخصصی هوش مصنوعی و یادگیری ماشین",
+        "description": "این همایش با هدف آشنایی با جدیدترین دستاوردهای حوزه هوش مصنوعی و کاربردهای آن در صنعت برگزار می‌شود. حضور برای عموم آزاد است.",
+        "status": "DRAFT"
+      }
+response:
+  statusCode: 400
+  statusText: Bad Request
+  headers:
+    Date: Wed, 22 Jul 2026 16:27:33 GMT
+    Server: WSGIServer/0.2 CPython/3.12.13
+    Content-Type: application/json
+    Vary: Accept
+    Allow: GET, POST, HEAD, OPTIONS
+    X-Frame-Options: DENY
+    Content-Length: "84"
+    X-Content-Type-Options: nosniff
+    Referrer-Policy: same-origin
+    Cross-Origin-Opener-Policy: same-origin
+  body:
+    type: text
+    content: |-
+      {
+          "capacity": [
+              "ظرفیت رویداد باید بزرگتر از صفر باشد."
+          ]
+      }
+order: 3000

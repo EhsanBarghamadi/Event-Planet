@@ -1,0 +1,36 @@
+$kind: http-example
+request:
+  url: "{{baseUrl}}/api/v1/attribute/"
+  method: POST
+  headers:
+    - key: Content-Type
+      value: application/json
+    - key: Accept
+      value: application/json
+    - key: Authorization
+      value: Bearer <token>
+      description: "Added as a part of security scheme: bearer"
+  body:
+    type: json
+    content: |-
+      {
+        "data_type": "BOOLEAN",
+        "name": "string",
+        "id": false,
+        "slug": 9511.09663378093
+      }
+response:
+  statusCode: 201
+  statusText: Created
+  headers:
+    Content-Type: application/json
+  body:
+    type: json
+    content: |-
+      {
+        "data_type": "BOOLEAN",
+        "id": 8354,
+        "name": "string",
+        "slug": "p3Gi9m"
+      }
+order: 1000

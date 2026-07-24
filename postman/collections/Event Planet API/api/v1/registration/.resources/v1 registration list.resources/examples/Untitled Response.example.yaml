@@ -1,0 +1,99 @@
+$kind: http-example
+request:
+  url: "{{baseUrl}}/api/v1/registration/?search=string"
+  method: GET
+  headers:
+    - key: Accept
+      value: application/json
+    - key: Authorization
+      value: Bearer <token>
+      description: "Added as a part of security scheme: bearer"
+  queryParams:
+    - key: search
+      value: string
+      description: A search term.
+response:
+  statusCode: 200
+  statusText: OK
+  headers:
+    Content-Type: application/json
+  body:
+    type: json
+    content: |-
+      [
+        {
+          "event": {
+            "attribute_values": [
+              {
+                "attribute": 3026,
+                "created_at": "2022-11-01T18:34:46.983Z",
+                "event": 5594,
+                "id": 116,
+                "updated_at": "2016-11-25T16:33:20.853Z",
+                "value_text": "string",
+                "value_int": 4215727737770651600,
+                "value_bool": false
+              },
+              {
+                "attribute": 351,
+                "created_at": "1961-02-09T21:20:16.496Z",
+                "event": 7836,
+                "id": 3026,
+                "updated_at": "1984-01-21T16:40:44.204Z",
+                "value_text": "string",
+                "value_int": -2550576255918113000,
+                "value_bool": false
+              }
+            ],
+            "capacity": 8674485241204986000,
+            "end_date": "1984-02-07T13:05:32.433Z",
+            "id": 4961,
+            "organizer": 9405,
+            "start_date": "1990-04-04T05:41:29.769Z",
+            "title": "string",
+            "description": "string",
+            "status": "DRAFT"
+          },
+          "id": 4739,
+          "participant": 8225,
+          "event_id": "string"
+        },
+        {
+          "event": {
+            "attribute_values": [
+              {
+                "attribute": 6973,
+                "created_at": "1987-07-23T20:46:07.355Z",
+                "event": 96,
+                "id": 2984,
+                "updated_at": "2001-06-01T22:43:26.954Z",
+                "value_text": "string",
+                "value_int": -8821535674153882000,
+                "value_bool": false
+              },
+              {
+                "attribute": 2154,
+                "created_at": "1964-03-15T19:04:24.529Z",
+                "event": 1317,
+                "id": 2659,
+                "updated_at": "2022-01-17T21:54:08.752Z",
+                "value_text": "string",
+                "value_int": 5346894711466349000,
+                "value_bool": false
+              }
+            ],
+            "capacity": 6933139024014848000,
+            "end_date": "1974-07-27T04:18:10.187Z",
+            "id": 6820,
+            "organizer": 1966,
+            "start_date": "2005-05-25T12:51:46.415Z",
+            "title": "string",
+            "description": "string",
+            "status": "ONGOING"
+          },
+          "id": 27,
+          "participant": 1329,
+          "event_id": "string"
+        }
+      ]
+order: 1000

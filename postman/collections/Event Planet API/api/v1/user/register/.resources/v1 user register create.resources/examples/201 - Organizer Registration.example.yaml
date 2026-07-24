@@ -1,0 +1,41 @@
+$kind: http-example
+request:
+  url: "{{baseUrl}}/api/v1/user/register/"
+  method: POST
+  headers:
+    Content-Type: application/json
+    Accept: application/json
+  body:
+    type: json
+    content: |
+      {
+        "first_name": "احمد",
+        "last_name": "احمدی",
+        "password": "ahmad123",
+        "phone": "09111111111",
+        "role": "ORGANIZER"
+      }
+response:
+  statusCode: 201
+  statusText: Created
+  headers:
+    Date: Wed, 22 Jul 2026 15:17:50 GMT
+    Server: WSGIServer/0.2 CPython/3.12.13
+    Content-Type: application/json
+    Vary: Accept, Cookie
+    Allow: POST, OPTIONS
+    X-Frame-Options: DENY
+    Content-Length: "91"
+    X-Content-Type-Options: nosniff
+    Referrer-Policy: same-origin
+    Cross-Origin-Opener-Policy: same-origin
+  body:
+    type: text
+    content: |-
+      {
+          "phone": "09111111111",
+          "first_name": "احمد",
+          "last_name": "احمدی",
+          "role": "ORGANIZER"
+      }
+order: 2000

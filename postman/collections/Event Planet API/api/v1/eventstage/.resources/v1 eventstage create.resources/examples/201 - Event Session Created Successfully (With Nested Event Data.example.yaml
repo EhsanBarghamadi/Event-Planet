@@ -1,0 +1,77 @@
+$kind: http-example
+name: 201 - Event Session Created Successfully (With Nested Event Data)
+request:
+  url: "{{baseUrl}}/api/v1/eventstage/"
+  method: POST
+  headers:
+    Content-Type: application/json
+    Accept: application/json
+  body:
+    type: json
+    content: |-
+      {
+        "start_time": "2026-11-01T09:00:00Z",
+        "end_time": "2026-11-15T18:00:00Z",
+        "order": 2,
+        "title": "جلسه اول",
+        "event_id": 7,
+        "description": "جلسه اول مربوط به همایش تخصصی هوش مصنوعی و یادگیری ماشین"
+      }
+response:
+  statusCode: 201
+  statusText: Created
+  headers:
+    Date: Thu, 23 Jul 2026 14:10:33 GMT
+    Server: WSGIServer/0.2 CPython/3.12.13
+    Content-Type: application/json
+    Vary: Accept
+    Allow: GET, POST, HEAD, OPTIONS
+    X-Frame-Options: DENY
+    Content-Length: "1067"
+    X-Content-Type-Options: nosniff
+    Referrer-Policy: same-origin
+    Cross-Origin-Opener-Policy: same-origin
+  body:
+    type: text
+    content: |-
+      {
+          "id": 1,
+          "event": {
+              "id": 7,
+              "organizer": 7,
+              "title": "همایش تخصصی هوش مصنوعی و یادگیری ماشین",
+              "description": "این همایش با هدف آشنایی با جدیدترین دستاوردهای حوزه هوش مصنوعی و کاربردهای آن در صنعت برگزار می\u200cشود. حضور برای عموم آزاد است.",
+              "status": "DRAFT",
+              "capacity": 150,
+              "start_date": "2026-11-01T09:00:00Z",
+              "end_date": "2026-12-20T18:00:00Z",
+              "attribute_values": [
+                  {
+                      "id": 4,
+                      "event": 7,
+                      "attribute": 6,
+                      "value_text": "Ahmad Eslami",
+                      "value_int": null,
+                      "value_bool": null,
+                      "created_at": "2026-07-23T01:55:29.999345Z",
+                      "updated_at": "2026-07-23T01:55:29.999392Z"
+                  },
+                  {
+                      "id": 5,
+                      "event": 7,
+                      "attribute": 8,
+                      "value_text": null,
+                      "value_int": null,
+                      "value_bool": false,
+                      "created_at": "2026-07-23T02:00:29.046822Z",
+                      "updated_at": "2026-07-23T02:00:29.046898Z"
+                  }
+              ]
+          },
+          "title": "جلسه اول",
+          "description": "جلسه اول مربوط به همایش تخصصی هوش مصنوعی و یادگیری ماشین",
+          "start_time": "2026-11-01T09:00:00Z",
+          "end_time": "2026-11-15T18:00:00Z",
+          "order": 1
+      }
+order: 2000

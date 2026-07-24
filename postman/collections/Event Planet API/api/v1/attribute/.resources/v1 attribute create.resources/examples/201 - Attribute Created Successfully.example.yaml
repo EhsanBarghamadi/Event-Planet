@@ -1,0 +1,38 @@
+$kind: http-example
+request:
+  url: "{{baseUrl}}/api/v1/attribute/"
+  method: POST
+  headers:
+    Content-Type: application/json
+    Accept: application/json
+  body:
+    type: json
+    content: |2-
+        {
+          "data_type": "TEXT",
+          "name": "برگزارکننده"
+        }
+response:
+  statusCode: 201
+  statusText: Created
+  headers:
+    Date: Thu, 23 Jul 2026 01:20:18 GMT
+    Server: WSGIServer/0.2 CPython/3.12.13
+    Content-Type: application/json
+    Vary: Accept
+    Allow: GET, POST, HEAD, OPTIONS
+    X-Frame-Options: DENY
+    Content-Length: "91"
+    X-Content-Type-Options: nosniff
+    Referrer-Policy: same-origin
+    Cross-Origin-Opener-Policy: same-origin
+  body:
+    type: text
+    content: |-
+      {
+          "id": 6,
+          "slug": "برگزارکننده",
+          "name": "برگزارکننده",
+          "data_type": "TEXT"
+      }
+order: 3000

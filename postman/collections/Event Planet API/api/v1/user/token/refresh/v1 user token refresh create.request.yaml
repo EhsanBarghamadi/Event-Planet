@@ -1,0 +1,25 @@
+$kind: http-request
+description: |-
+  Takes a refresh type JSON web token and returns an access type JSON web
+  token if the refresh token is valid.
+url: "{{baseUrl}}/api/v1/user/token/refresh/"
+method: POST
+headers:
+  Content-Type: application/json
+  Accept: application/json
+body:
+  type: json
+  content: |
+    {
+        "refresh": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTc4NDgyMzUwMywiaWF0IjoxNzg0NzM3MTAzLCJqdGkiOiJmYTA5ZGRjNzJiZjk0MzgwYjkxMGJiNDliNTY4NjVmOSIsInVzZXJfaWQiOiI3In0.RclMI-ZB6jfT9eCII2HgUwoRf-rvouUA5CLTgaQX2KQ",
+        "access": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzg0NzM3NDAzLCJpYXQiOjE3ODQ3MzcxMDMsImp0aSI6ImIzMTEwZWEzNWZlMzQ1Yzg5NjkyZGU4NDM4MTEwYzE3IiwidXNlcl9pZCI6IjcifQ.6lpfnttsbhcfHsmIw03nUvyL0dWCqW6NrYLtoyW-wCM"
+    }
+auth:
+  type: noauth
+scripts:
+  - type: afterResponse
+    code: pm.globals.set("bearerToken", pm.response.json().access);
+    language: text/javascript
+settings: {}
+examples: ./.resources/v1 user token refresh create.resources/examples
+order: 1000

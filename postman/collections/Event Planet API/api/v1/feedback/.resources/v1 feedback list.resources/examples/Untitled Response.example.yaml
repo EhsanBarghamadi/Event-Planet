@@ -1,0 +1,99 @@
+$kind: http-example
+request:
+  url: "{{baseUrl}}/api/v1/feedback/?search=string"
+  method: GET
+  headers:
+    - key: Accept
+      value: application/json
+    - key: Authorization
+      value: Bearer <token>
+      description: "Added as a part of security scheme: bearer"
+  queryParams:
+    - key: search
+      value: string
+      description: A search term.
+response:
+  statusCode: 200
+  statusText: OK
+  headers:
+    Content-Type: application/json
+  body:
+    type: json
+    content: |-
+      [
+        {
+          "event": {
+            "attribute_values": [
+              {
+                "attribute": 4431,
+                "created_at": "1996-05-05T09:47:20.387Z",
+                "event": 9179,
+                "id": 6447,
+                "updated_at": "1953-09-08T03:31:01.895Z",
+                "value_text": "string",
+                "value_int": 8295632410689950000,
+                "value_bool": true
+              },
+              {
+                "attribute": 8876,
+                "created_at": "2007-08-07T14:31:27.538Z",
+                "event": 1628,
+                "id": 1999,
+                "updated_at": "2025-10-29T23:16:04.183Z",
+                "value_text": "string",
+                "value_int": -8553359323109061000,
+                "value_bool": false
+              }
+            ],
+            "capacity": 5303536742649567000,
+            "end_date": "2016-08-11T20:48:03.003Z",
+            "id": 5689,
+            "organizer": 1326,
+            "start_date": "2013-09-16T04:14:20.557Z",
+            "title": "string",
+            "description": "string",
+            "status": "PUBLISHED"
+          },
+          "participant": 4006,
+          "rating": 2,
+          "comment": "string"
+        },
+        {
+          "event": {
+            "attribute_values": [
+              {
+                "attribute": 5635,
+                "created_at": "1956-05-24T17:56:37.873Z",
+                "event": 5814,
+                "id": 9296,
+                "updated_at": "1964-10-17T01:08:18.256Z",
+                "value_text": "string",
+                "value_int": -2407594824104685600,
+                "value_bool": true
+              },
+              {
+                "attribute": 4027,
+                "created_at": "1965-12-30T01:53:45.743Z",
+                "event": 4127,
+                "id": 1361,
+                "updated_at": "1949-03-16T03:13:13.235Z",
+                "value_text": "string",
+                "value_int": 1417809711391301600,
+                "value_bool": false
+              }
+            ],
+            "capacity": 3127414192700913700,
+            "end_date": "1949-02-22T04:01:21.495Z",
+            "id": 3716,
+            "organizer": 5732,
+            "start_date": "1993-08-28T21:11:25.509Z",
+            "title": "string",
+            "description": "string",
+            "status": "DRAFT"
+          },
+          "participant": 8246,
+          "rating": 3,
+          "comment": "string"
+        }
+      ]
+order: 1000

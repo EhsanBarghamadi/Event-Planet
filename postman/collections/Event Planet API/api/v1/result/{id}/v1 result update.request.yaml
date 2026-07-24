@@ -1,0 +1,40 @@
+$kind: http-request
+url: "{{baseUrl}}/api/v1/result/:id/"
+method: PUT
+headers:
+  Content-Type: application/json
+  Accept: application/json
+pathVariables:
+  - key: id
+    value: "1791"
+    description: A unique integer value identifying this نتیجه رویداد.
+body:
+  type: json
+  content: |-
+    {
+      "achievement": "string",
+      "event": {
+        "capacity": 1601182044680691700,
+        "end_date": "2024-11-18T17:53:32.404Z",
+        "start_date": "1972-01-31T09:31:11.733Z",
+        "title": "string",
+        "description": "string",
+        "status": "ONGOING",
+        "attribute_values": true
+      },
+      "event_id": 4147,
+      "participant": {
+        "first_name": "string",
+        "last_name": "string",
+        "phone": "string",
+        "role": "PARTICIPANT"
+      },
+      "participant_id": 7966
+    }
+auth:
+  type: bearer
+  credentials:
+    token: "{{bearerToken}}"
+settings: {}
+examples: ./.resources/v1 result update.resources/examples
+order: 2000

@@ -1,0 +1,39 @@
+$kind: http-example
+request:
+  url: "{{baseUrl}}/api/v1/event/:id/"
+  method: GET
+  headers:
+    Accept: application/json
+  pathVariables:
+    - key: id
+      value: "6"
+      description: A unique integer value identifying this رویداد.
+response:
+  statusCode: 200
+  statusText: OK
+  headers:
+    Date: Wed, 22 Jul 2026 16:58:33 GMT
+    Server: WSGIServer/0.2 CPython/3.12.13
+    Content-Type: application/json
+    Vary: Accept
+    Allow: GET, PUT, PATCH, DELETE, HEAD, OPTIONS
+    X-Frame-Options: DENY
+    Content-Length: "471"
+    X-Content-Type-Options: nosniff
+    Referrer-Policy: same-origin
+    Cross-Origin-Opener-Policy: same-origin
+  body:
+    type: text
+    content: |-
+      {
+          "id": 6,
+          "organizer": 7,
+          "title": "همایش تخصصی هوش مصنوعی و یادگیری ماشین",
+          "description": "این همایش با هدف آشنایی با جدیدترین دستاوردهای حوزه هوش مصنوعی و کاربردهای آن در صنعت برگزار می\u200cشود. حضور برای عموم آزاد است.",
+          "status": "DRAFT",
+          "capacity": 150,
+          "start_date": "2026-11-01T09:00:00Z",
+          "end_date": "2026-12-20T18:00:00Z",
+          "attribute_values": []
+      }
+order: 2000

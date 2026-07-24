@@ -1,0 +1,27 @@
+$kind: http-request
+url: "{{baseUrl}}/api/v1/eventattributevalue/:id/"
+method: PATCH
+headers:
+  Content-Type: application/json
+  Accept: application/json
+pathVariables:
+  - key: id
+    value: "1791"
+    description: A unique integer value identifying this مقدار ویژگی رویداد.
+body:
+  type: json
+  content: |-
+    {
+      "event": 4114,
+      "attribute": 5619,
+      "value_text": "string",
+      "value_int": -7065246528174006000,
+      "value_bool": true
+    }
+auth:
+  type: bearer
+  credentials:
+    token: "{{bearerToken}}"
+settings: {}
+examples: ./.resources/v1 eventattributevalue partial update.resources/examples
+order: 3000

@@ -1,0 +1,37 @@
+$kind: http-example
+request:
+  url: "{{baseUrl}}/api/v1/event/"
+  method: GET
+  headers:
+    Accept: application/json
+response:
+  statusCode: 200
+  statusText: OK
+  headers:
+    Date: Thu, 23 Jul 2026 16:28:14 GMT
+    Server: WSGIServer/0.2 CPython/3.12.13
+    Content-Type: application/json
+    Vary: Accept
+    Allow: GET, POST, HEAD, OPTIONS
+    X-Frame-Options: DENY
+    Content-Length: "546"
+    X-Content-Type-Options: nosniff
+    Referrer-Policy: same-origin
+    Cross-Origin-Opener-Policy: same-origin
+  body:
+    type: text
+    content: |-
+      [
+          {
+              "id": 9,
+              "organizer": 7,
+              "title": "همایش ملی کارآفرینی و اشتغال پایدار",
+              "description": "همایش ملی کارآفرینی و اشتغال پایدار با حضور رؤسای دانشگاه\u200cها، کارآفرینان برتر و مسئولین عالی رتبه کشور برگزار گردید. این همایش با استقبال بی\u200cنظیر مخاطبین مواجه شد.",
+              "status": "PUBLISHED",
+              "capacity": 1000,
+              "start_date": "2026-10-09T18:00:00Z",
+              "end_date": "2026-10-10T22:00:00Z",
+              "attribute_values": []
+          }
+      ]
+order: 3000

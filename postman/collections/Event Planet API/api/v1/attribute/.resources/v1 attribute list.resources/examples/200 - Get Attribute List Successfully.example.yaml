@@ -1,0 +1,54 @@
+$kind: http-example
+request:
+  url: "{{baseUrl}}/api/v1/attribute/?search=string"
+  method: GET
+  headers:
+    Accept: application/json
+  queryParams:
+    - key: search
+      value: string
+      description: A search term.
+response:
+  statusCode: 200
+  statusText: OK
+  headers:
+    Date: Thu, 23 Jul 2026 01:27:18 GMT
+    Server: WSGIServer/0.2 CPython/3.12.13
+    Content-Type: application/json
+    Vary: Accept
+    Allow: GET, POST, HEAD, OPTIONS
+    X-Frame-Options: DENY
+    Content-Length: "401"
+    X-Content-Type-Options: nosniff
+    Referrer-Policy: same-origin
+    Cross-Origin-Opener-Policy: same-origin
+  body:
+    type: text
+    content: |-
+      [
+          {
+              "id": 6,
+              "slug": "برگزارکننده",
+              "name": "برگزارکننده",
+              "data_type": "TEXT"
+          },
+          {
+              "id": 7,
+              "slug": "لینک-شبکه-اجتماعی",
+              "name": "لینک شبکه اجتماعی",
+              "data_type": "TEXT"
+          },
+          {
+              "id": 8,
+              "slug": "وضعیت-جلسه",
+              "name": "وضعیت جلسه",
+              "data_type": "BOOLEAN"
+          },
+          {
+              "id": 9,
+              "slug": "زمان-جلسهدقیقه",
+              "name": "زمان جلسه(دقیقه)",
+              "data_type": "INTEGER"
+          }
+      ]
+order: 2000

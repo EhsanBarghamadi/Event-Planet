@@ -1,0 +1,38 @@
+$kind: http-example
+request:
+  url: "{{baseUrl}}/api/v1/feedback/"
+  method: POST
+  headers:
+    Content-Type: application/json
+    Accept: application/json
+  body:
+    type: json
+    content: |-
+      {
+        "event_id": 7,
+        "rating": 3,
+        "comment": "این دوره خیلی خوب است."
+      }
+response:
+  statusCode: 400
+  statusText: Bad Request
+  headers:
+    Date: Thu, 23 Jul 2026 15:52:18 GMT
+    Server: WSGIServer/0.2 CPython/3.12.13
+    Content-Type: application/json
+    Vary: Accept
+    Allow: GET, POST, HEAD, OPTIONS
+    X-Frame-Options: DENY
+    Content-Length: "123"
+    X-Content-Type-Options: nosniff
+    Referrer-Policy: same-origin
+    Cross-Origin-Opener-Policy: same-origin
+  body:
+    type: text
+    content: |-
+      {
+          "event": [
+              "فقط برای رویدادهای پایان\u200cیافته می\u200cتوانید بازخورد ثبت کنید"
+          ]
+      }
+order: 2000

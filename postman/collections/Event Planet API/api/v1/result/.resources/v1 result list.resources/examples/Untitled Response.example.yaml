@@ -1,0 +1,113 @@
+$kind: http-example
+request:
+  url: "{{baseUrl}}/api/v1/result/?search=string"
+  method: GET
+  headers:
+    - key: Accept
+      value: application/json
+    - key: Authorization
+      value: Bearer <token>
+      description: "Added as a part of security scheme: bearer"
+  queryParams:
+    - key: search
+      value: string
+      description: A search term.
+response:
+  statusCode: 200
+  statusText: OK
+  headers:
+    Content-Type: application/json
+  body:
+    type: json
+    content: |-
+      [
+        {
+          "achievement": "string",
+          "event": {
+            "attribute_values": [
+              {
+                "attribute": 8923,
+                "created_at": "1952-08-07T06:27:23.320Z",
+                "event": 5097,
+                "id": 7911,
+                "updated_at": "1950-11-01T03:34:18.921Z",
+                "value_text": "string",
+                "value_int": -3300649552585732000,
+                "value_bool": true
+              },
+              {
+                "attribute": 9682,
+                "created_at": "1956-07-12T07:11:07.101Z",
+                "event": 9465,
+                "id": 9401,
+                "updated_at": "2011-10-06T06:02:29.880Z",
+                "value_text": "string",
+                "value_int": 8069333673002697000,
+                "value_bool": true
+              }
+            ],
+            "capacity": 1574129074188820500,
+            "end_date": "1992-05-02T01:27:58.452Z",
+            "id": 4867,
+            "organizer": 171,
+            "start_date": "2002-01-19T05:53:21.063Z",
+            "title": "string",
+            "description": "string",
+            "status": "PUBLISHED"
+          },
+          "participant": {
+            "first_name": "string",
+            "id": 8523,
+            "last_name": "string",
+            "phone": "string",
+            "role": "STAFF"
+          },
+          "event_id": false,
+          "participant_id": true
+        },
+        {
+          "achievement": "string",
+          "event": {
+            "attribute_values": [
+              {
+                "attribute": 7508,
+                "created_at": "2020-10-02T20:23:48.191Z",
+                "event": 3635,
+                "id": 6491,
+                "updated_at": "1961-08-30T11:51:35.953Z",
+                "value_text": "string",
+                "value_int": 3975483209167327000,
+                "value_bool": false
+              },
+              {
+                "attribute": 8978,
+                "created_at": "1958-08-29T16:40:45.883Z",
+                "event": 838,
+                "id": 2253,
+                "updated_at": "2015-11-09T06:50:22.428Z",
+                "value_text": "string",
+                "value_int": -5363801062243103000,
+                "value_bool": false
+              }
+            ],
+            "capacity": 1862287408664410000,
+            "end_date": "1977-05-09T21:33:50.199Z",
+            "id": 5897,
+            "organizer": 5812,
+            "start_date": "1985-12-01T16:01:04.451Z",
+            "title": "string",
+            "description": "string",
+            "status": "ONGOING"
+          },
+          "participant": {
+            "first_name": "string",
+            "id": 58,
+            "last_name": "string",
+            "phone": "string",
+            "role": "PARTICIPANT"
+          },
+          "event_id": 2863,
+          "participant_id": 8349.40693673065
+        }
+      ]
+order: 1000

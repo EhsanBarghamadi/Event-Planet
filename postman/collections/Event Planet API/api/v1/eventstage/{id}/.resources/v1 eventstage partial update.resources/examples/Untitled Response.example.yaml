@@ -1,0 +1,106 @@
+$kind: http-example
+request:
+  url: "{{baseUrl}}/api/v1/eventstage/:id/"
+  method: PATCH
+  headers:
+    - key: Content-Type
+      value: application/json
+    - key: Accept
+      value: application/json
+    - key: Authorization
+      value: Bearer <token>
+      description: "Added as a part of security scheme: bearer"
+  pathVariables:
+    id: ""
+  body:
+    type: json
+    content: |-
+      {
+        "event": {
+          "attribute_values": [
+            {
+              "attribute": 5165,
+              "created_at": "1949-02-22T06:44:00.334Z",
+              "event": 6332,
+              "id": 333,
+              "updated_at": "1966-12-20T20:21:08.129Z",
+              "value_text": "string",
+              "value_int": 2100540522509869000,
+              "value_bool": true
+            },
+            {
+              "attribute": 5623,
+              "created_at": "1954-01-15T07:50:41.742Z",
+              "event": 6191,
+              "id": 6881,
+              "updated_at": "1990-02-24T09:42:13.043Z",
+              "value_text": "string",
+              "value_int": -3182895080503447600,
+              "value_bool": false
+            }
+          ],
+          "capacity": 959462760504604700,
+          "end_date": "2006-03-13T04:02:24.104Z",
+          "id": 4433,
+          "organizer": 928,
+          "start_date": "2012-11-23T22:24:21.079Z",
+          "title": "string",
+          "description": "string",
+          "status": "PUBLISHED"
+        },
+        "event_id": 4325,
+        "title": "string",
+        "description": "string",
+        "start_time": "2002-06-26T00:54:03.083Z",
+        "end_time": "1958-07-31T08:04:24.405Z",
+        "order": 8806941637098748000
+      }
+response:
+  statusCode: 200
+  statusText: OK
+  headers:
+    Content-Type: application/json
+  body:
+    type: json
+    content: |-
+      {
+        "end_time": "1972-07-18T04:43:52.945Z",
+        "event": {
+          "attribute_values": [
+            {
+              "attribute": 6977,
+              "created_at": "1980-05-03T10:52:04.717Z",
+              "event": 3367,
+              "id": 4520,
+              "updated_at": "1956-02-01T13:04:54.232Z",
+              "value_text": "string",
+              "value_int": 3102763971276402700,
+              "value_bool": true
+            },
+            {
+              "attribute": 3366,
+              "created_at": "1950-02-12T04:38:17.393Z",
+              "event": 8813,
+              "id": 6293,
+              "updated_at": "2021-09-05T00:59:36.558Z",
+              "value_text": "string",
+              "value_int": 1029929699808985100,
+              "value_bool": false
+            }
+          ],
+          "capacity": 2529799664776837000,
+          "end_date": "1976-05-05T00:52:17.276Z",
+          "id": 2014,
+          "organizer": 7812,
+          "start_date": "2000-06-15T06:51:11.502Z",
+          "title": "string",
+          "description": "string",
+          "status": "PUBLISHED"
+        },
+        "id": 8863,
+        "order": 2626780303118764000,
+        "start_time": "1981-06-11T03:43:47.822Z",
+        "title": "string",
+        "description": "string"
+      }
+order: 1000

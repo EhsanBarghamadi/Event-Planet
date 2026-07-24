@@ -1,0 +1,75 @@
+$kind: http-example
+request:
+  url: "{{baseUrl}}/api/v1/registration/"
+  method: POST
+  headers:
+    - key: Content-Type
+      value: application/json
+    - key: Accept
+      value: application/json
+    - key: Authorization
+      value: Bearer <token>
+      description: "Added as a part of security scheme: bearer"
+  body:
+    type: json
+    content: |-
+      {
+        "event": {
+          "capacity": 3085658108613902300,
+          "end_date": "1980-10-06T19:40:19.607Z",
+          "start_date": "1979-04-03T17:23:27.324Z",
+          "title": "string",
+          "description": "string",
+          "status": "DRAFT",
+          "attribute_values": false
+        },
+        "event_id": 4612,
+        "id": 6381.946830015466,
+        "participant": 515
+      }
+response:
+  statusCode: 201
+  statusText: Created
+  headers:
+    Content-Type: application/json
+  body:
+    type: json
+    content: |-
+      {
+        "event": {
+          "attribute_values": [
+            {
+              "attribute": 7738,
+              "created_at": "1994-07-04T16:17:42.364Z",
+              "event": 39,
+              "id": 1045,
+              "updated_at": "1995-04-20T00:43:41.400Z",
+              "value_text": "string",
+              "value_int": -6222461380407591000,
+              "value_bool": true
+            },
+            {
+              "attribute": 5110,
+              "created_at": "1979-02-07T12:31:02.773Z",
+              "event": 4826,
+              "id": 8414,
+              "updated_at": "1975-09-04T22:07:47.590Z",
+              "value_text": "string",
+              "value_int": -8321851117558415000,
+              "value_bool": true
+            }
+          ],
+          "capacity": 2214183768718379000,
+          "end_date": "1954-03-08T09:32:21.995Z",
+          "id": 2962,
+          "organizer": 4467,
+          "start_date": "1974-03-15T21:07:00.729Z",
+          "title": "string",
+          "description": "string",
+          "status": "DRAFT"
+        },
+        "id": 3644,
+        "participant": 2723,
+        "event_id": "string"
+      }
+order: 1000

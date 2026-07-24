@@ -1,0 +1,23 @@
+$kind: http-request
+url: "{{baseUrl}}/api/v1/eventattributevalue/"
+method: POST
+headers:
+  Content-Type: application/json
+  Accept: application/json
+body:
+  type: json
+  content: |-
+    {
+      "attribute": 1974,
+      "event": 4724,
+      "value_text": "string",
+      "value_int": -2337578742760022000,
+      "value_bool": false
+    }
+auth:
+  type: bearer
+  credentials:
+    token: "{{bearerToken}}"
+settings: {}
+examples: ./.resources/v1 eventattributevalue create.resources/examples
+order: 3000

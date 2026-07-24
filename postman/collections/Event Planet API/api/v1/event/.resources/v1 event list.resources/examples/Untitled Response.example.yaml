@@ -1,0 +1,98 @@
+$kind: http-example
+request:
+  url: "{{baseUrl}}/api/v1/event/?search=string&status=PUBLISHED"
+  method: GET
+  headers:
+    - key: Accept
+      value: application/json
+    - key: Authorization
+      value: Bearer <token>
+      description: "Added as a part of security scheme: bearer"
+  queryParams:
+    - key: search
+      value: string
+      description: A search term.
+    - key: status
+      value: PUBLISHED
+      description: |-
+        * `DRAFT` - پیش‌نویس
+        * `PUBLISHED` - منتشر شده
+        * `ONGOING` - در حال برگزاری
+        * `CLOSED` - بسته شده
+        * `FINISHED` - پایان یافته
+        * `CANCELLED` - لغو شده
+response:
+  statusCode: 200
+  statusText: OK
+  headers:
+    Content-Type: application/json
+  body:
+    type: json
+    content: |-
+      [
+        {
+          "attribute_values": [
+            {
+              "attribute": 6297,
+              "created_at": "1961-12-17T05:26:20.246Z",
+              "event": 2356,
+              "id": 4854,
+              "updated_at": "2022-03-15T11:33:02.776Z",
+              "value_text": "string",
+              "value_int": 3304844063072076000,
+              "value_bool": true
+            },
+            {
+              "attribute": 8999,
+              "created_at": "1965-02-14T07:18:00.960Z",
+              "event": 819,
+              "id": 7258,
+              "updated_at": "2013-10-29T00:48:43.018Z",
+              "value_text": "string",
+              "value_int": -8454632016558064000,
+              "value_bool": false
+            }
+          ],
+          "capacity": 8155288497041486000,
+          "end_date": "1948-12-20T05:21:53.278Z",
+          "id": 5830,
+          "organizer": 2578,
+          "start_date": "1956-09-02T06:38:33.861Z",
+          "title": "string",
+          "description": "string",
+          "status": "DRAFT"
+        },
+        {
+          "attribute_values": [
+            {
+              "attribute": 9898,
+              "created_at": "1952-01-06T22:27:57.953Z",
+              "event": 7135,
+              "id": 143,
+              "updated_at": "2007-05-22T05:49:12.995Z",
+              "value_text": "string",
+              "value_int": 8087781943792599000,
+              "value_bool": true
+            },
+            {
+              "attribute": 3087,
+              "created_at": "2009-07-20T11:39:38.585Z",
+              "event": 2431,
+              "id": 8130,
+              "updated_at": "1951-02-07T02:11:25.253Z",
+              "value_text": "string",
+              "value_int": 8531681904092332000,
+              "value_bool": true
+            }
+          ],
+          "capacity": 5116002903419062000,
+          "end_date": "1955-06-09T02:36:14.843Z",
+          "id": 8407,
+          "organizer": 9941,
+          "start_date": "2011-04-28T20:26:14.545Z",
+          "title": "string",
+          "description": "string",
+          "status": "FINISHED"
+        }
+      ]
+order: 1000

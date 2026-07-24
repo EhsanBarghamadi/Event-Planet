@@ -1,0 +1,34 @@
+$kind: http-example
+request:
+  url: "{{baseUrl}}/api/v1/user/token/logout/"
+  method: POST
+  headers:
+    Content-Type: application/json
+    Accept: application/json
+  body:
+    type: json
+    content: |
+      {
+      "refresh": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTc4NDgyMDk1MCwiaWF0IjoxNzg0NzM0NTUwLCJqdGkiOiJiZTRmZGE3ZGUxZGQ0M2E5YmE4MjU1ODYyNjM5NmY5NyIsInVzZXJfaWQiOiI3In0.V8OaY6McGV_w3EEIMTBXlF2UILAv8_eow-6n1FyDydw"
+      }
+response:
+  statusCode: 205
+  statusText: Reset Content
+  headers:
+    Date: Wed, 22 Jul 2026 15:47:55 GMT
+    Server: WSGIServer/0.2 CPython/3.12.13
+    Content-Type: application/json
+    Vary: Accept
+    Allow: POST, OPTIONS
+    X-Frame-Options: DENY
+    Content-Length: "38"
+    X-Content-Type-Options: nosniff
+    Referrer-Policy: same-origin
+    Cross-Origin-Opener-Policy: same-origin
+  body:
+    type: text
+    content: |-
+      {
+          "message": "Successfully logged out."
+      }
+order: 2000

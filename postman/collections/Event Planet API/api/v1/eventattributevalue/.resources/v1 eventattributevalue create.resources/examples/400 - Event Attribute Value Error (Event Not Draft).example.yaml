@@ -1,0 +1,38 @@
+$kind: http-example
+request:
+  url: "{{baseUrl}}/api/v1/eventattributevalue/"
+  method: POST
+  headers:
+    Content-Type: application/json
+    Accept: application/json
+  body:
+    type: json
+    content: |-
+      {
+        "attribute": 8,
+        "event": 8,
+        "value_bool": false
+      }
+response:
+  statusCode: 400
+  statusText: Bad Request
+  headers:
+    Date: Thu, 23 Jul 2026 02:00:46 GMT
+    Server: WSGIServer/0.2 CPython/3.12.13
+    Content-Type: application/json
+    Vary: Accept
+    Allow: GET, POST, HEAD, OPTIONS
+    X-Frame-Options: DENY
+    Content-Length: "111"
+    X-Content-Type-Options: nosniff
+    Referrer-Policy: same-origin
+    Cross-Origin-Opener-Policy: same-origin
+  body:
+    type: text
+    content: |-
+      {
+          "event": [
+              "امکان ثبت ویژگی فقط روی رویداد های پیش نویس وجود دارد."
+          ]
+      }
+order: 5000

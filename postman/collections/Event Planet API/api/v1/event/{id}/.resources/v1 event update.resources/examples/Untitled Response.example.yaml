@@ -1,0 +1,67 @@
+$kind: http-example
+request:
+  url: "{{baseUrl}}/api/v1/event/:id/"
+  method: PUT
+  headers:
+    - key: Content-Type
+      value: application/json
+    - key: Accept
+      value: application/json
+    - key: Authorization
+      value: Bearer <token>
+      description: "Added as a part of security scheme: bearer"
+  pathVariables:
+    id: ""
+  body:
+    type: json
+    content: |-
+      {
+        "capacity": 2633973839084822500,
+        "end_date": "1984-05-11T13:45:32.643Z",
+        "start_date": "2018-04-07T11:44:08.280Z",
+        "title": "string",
+        "description": "string",
+        "status": "CLOSED",
+        "attribute_values": 6743.372923933082
+      }
+response:
+  statusCode: 200
+  statusText: OK
+  headers:
+    Content-Type: application/json
+  body:
+    type: json
+    content: |-
+      {
+        "attribute_values": [
+          {
+            "attribute": 9442,
+            "created_at": "2004-10-30T21:50:27.124Z",
+            "event": 9013,
+            "id": 4908,
+            "updated_at": "1998-03-04T02:50:52.642Z",
+            "value_text": "string",
+            "value_int": 3104935372031230000,
+            "value_bool": true
+          },
+          {
+            "attribute": 4314,
+            "created_at": "1990-05-22T13:40:39.778Z",
+            "event": 2665,
+            "id": 5525,
+            "updated_at": "1995-11-16T01:07:03.331Z",
+            "value_text": "string",
+            "value_int": -452520301841457150,
+            "value_bool": false
+          }
+        ],
+        "capacity": 4006279589229291500,
+        "end_date": "1964-08-05T02:17:03.457Z",
+        "id": 4746,
+        "organizer": 4133,
+        "start_date": "2005-02-24T00:17:23.033Z",
+        "title": "string",
+        "description": "string",
+        "status": "CANCELLED"
+      }
+order: 1000

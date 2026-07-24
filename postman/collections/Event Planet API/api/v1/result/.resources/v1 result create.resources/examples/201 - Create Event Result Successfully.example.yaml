@@ -1,0 +1,54 @@
+$kind: http-example
+request:
+  url: "{{baseUrl}}/api/v1/result/"
+  method: POST
+  headers:
+    Content-Type: application/json
+    Accept: application/json
+  body:
+    type: json
+    content: |-
+      {
+        "achievement": "کسب رتبه دوم ",
+        "event_id": 8,
+        "participant_id": 8
+      }
+response:
+  statusCode: 201
+  statusText: Created
+  headers:
+    Date: Fri, 24 Jul 2026 04:29:43 GMT
+    Server: WSGIServer/0.2 CPython/3.12.13
+    Content-Type: application/json
+    Vary: Accept
+    Allow: GET, POST, HEAD, OPTIONS
+    X-Frame-Options: DENY
+    Content-Length: "651"
+    X-Content-Type-Options: nosniff
+    Referrer-Policy: same-origin
+    Cross-Origin-Opener-Policy: same-origin
+  body:
+    type: text
+    content: |-
+      {
+          "event": {
+              "id": 8,
+              "organizer": 7,
+              "title": "دوره آموزشی برنامه\u200cسازی پایتون مقدماتی",
+              "description": "دوره آموزشی برنامه\u200cسازی پایتون سطح مقدماتی با تدریس اساتید مجرب به پایان رسیده است. از تمامی شرکت\u200cکنندگان تقدیر به عمل خواهد آمد.",
+              "status": "FINISHED",
+              "capacity": 200,
+              "start_date": "2026-11-01T09:00:00Z",
+              "end_date": "2026-11-15T18:00:00Z",
+              "attribute_values": []
+          },
+          "participant": {
+              "id": 8,
+              "phone": "09222222222",
+              "first_name": "فرید",
+              "last_name": "فریدی",
+              "role": "PARTICIPANT"
+          },
+          "achievement": "کسب رتبه دوم"
+      }
+order: 2000

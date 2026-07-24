@@ -1,0 +1,25 @@
+$kind: http-example
+request:
+  url: "{{baseUrl}}/api/v1/eventstage/:id/"
+  method: DELETE
+  pathVariables:
+    - key: id
+      value: "3"
+      description: A unique integer value identifying this مرحله رویداد.
+response:
+  statusCode: 204
+  statusText: No Content
+  headers:
+    Date: Thu, 23 Jul 2026 14:47:29 GMT
+    Server: WSGIServer/0.2 CPython/3.12.13
+    Vary: Accept
+    Allow: GET, PUT, PATCH, DELETE, HEAD, OPTIONS
+    X-Frame-Options: DENY
+    Content-Length: "0"
+    X-Content-Type-Options: nosniff
+    Referrer-Policy: same-origin
+    Cross-Origin-Opener-Policy: same-origin
+  body:
+    type: text
+    content: ""
+order: 2000

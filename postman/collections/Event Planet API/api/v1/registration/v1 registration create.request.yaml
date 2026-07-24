@@ -1,0 +1,30 @@
+$kind: http-request
+url: "{{baseUrl}}/api/v1/registration/"
+method: POST
+headers:
+  Content-Type: application/json
+  Accept: application/json
+body:
+  type: json
+  content: |-
+    {
+      "event": {
+        "capacity": 3085658108613902300,
+        "end_date": "1980-10-06T19:40:19.607Z",
+        "start_date": "1979-04-03T17:23:27.324Z",
+        "title": "string",
+        "description": "string",
+        "status": "DRAFT",
+        "attribute_values": false
+      },
+      "event_id": 4612,
+      "id": 6381.946830015466,
+      "participant": 515
+    }
+auth:
+  type: bearer
+  credentials:
+    token: "{{bearerToken}}"
+settings: {}
+examples: ./.resources/v1 registration create.resources/examples
+order: 3000

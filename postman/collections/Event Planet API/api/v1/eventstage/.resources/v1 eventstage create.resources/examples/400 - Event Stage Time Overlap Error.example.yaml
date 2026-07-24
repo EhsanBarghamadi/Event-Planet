@@ -1,0 +1,41 @@
+$kind: http-example
+request:
+  url: "{{baseUrl}}/api/v1/eventstage/"
+  method: POST
+  headers:
+    Content-Type: application/json
+    Accept: application/json
+  body:
+    type: json
+    content: |-
+      {
+        "start_time": "2026-12-06T09:00:00Z",
+        "end_time": "2026-12-20T18:00:00Z",
+        "order": 2,
+        "title": "جلسه دوم",
+        "event_id": 7,
+        "description": "جلسه دوم مربوط به همایش تخصصی هوش مصنوعی و یادگیری ماشین"
+      }
+response:
+  statusCode: 400
+  statusText: Bad Request
+  headers:
+    Date: Thu, 23 Jul 2026 14:19:41 GMT
+    Server: WSGIServer/0.2 CPython/3.12.13
+    Content-Type: application/json
+    Vary: Accept
+    Allow: GET, POST, HEAD, OPTIONS
+    X-Frame-Options: DENY
+    Content-Length: "122"
+    X-Content-Type-Options: nosniff
+    Referrer-Policy: same-origin
+    Cross-Origin-Opener-Policy: same-origin
+  body:
+    type: text
+    content: |-
+      {
+          "start_time": [
+              "این مرحله با مرحله\u200cهای دیگر تداخل زمانی دارد: \"جلسه دوم\""
+          ]
+      }
+order: 3000

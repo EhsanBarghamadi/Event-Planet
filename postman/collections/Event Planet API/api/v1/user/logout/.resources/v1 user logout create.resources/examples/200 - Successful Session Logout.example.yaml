@@ -1,0 +1,29 @@
+$kind: http-example
+request:
+  url: "{{baseUrl}}/api/v1/user/logout/"
+  method: POST
+  headers:
+    Accept: application/json
+    X-CSRFToken: SMDkMIDLDvqKZN8H31Y2i3kcCuVcic5m
+response:
+  statusCode: 200
+  statusText: OK
+  headers:
+    Date: Wed, 22 Jul 2026 16:05:52 GMT
+    Server: WSGIServer/0.2 CPython/3.12.13
+    Content-Type: application/json
+    Vary: Accept, Cookie
+    Allow: POST, OPTIONS
+    X-Frame-Options: DENY
+    Content-Length: "24"
+    X-Content-Type-Options: nosniff
+    Referrer-Policy: same-origin
+    Cross-Origin-Opener-Policy: same-origin
+    Set-Cookie: sessionid=""; expires=Thu, 01 Jan 1970 00:00:00 GMT; Max-Age=0; Path=/; SameSite=Lax
+  body:
+    type: text
+    content: |-
+      {
+          "detail": "Logged out."
+      }
+order: 2000

@@ -1,0 +1,16 @@
+$kind: http-request
+url: "{{baseUrl}}/api/v1/eventstage/?search=string"
+method: GET
+headers:
+  Accept: application/json
+queryParams:
+  - key: search
+    value: string
+    description: A search term.
+auth:
+  type: bearer
+  credentials:
+    token: "{{bearerToken}}"
+settings: {}
+examples: ./.resources/v1 eventstage list.resources/examples
+order: 2000
