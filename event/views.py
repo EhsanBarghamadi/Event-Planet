@@ -8,7 +8,7 @@ from rest_framework import status
 from rest_framework.response import Response
 from django.db.models import Q
 
-from core.permissions import IsOrganizer, IsEventOwner
+from core.permissions import IsOrganizer, IsEventOwner, IsEventDraft
 from relation.models import Registration
 from relation.serializers import RegistrationReadOnlySerializer
 from .models import Event, EventStage
@@ -59,7 +59,7 @@ class EventStageViewSet(viewsets.ModelViewSet):
 
     def get_permissions(self):
         if self.action in ['create', 'update', 'partial_update', 'destroy']:
-            return [permissions.IsAuthenticated(), IsOrganizer(), IsEventOwner()]
+            return [permissions.IsAuthenticated(), IsOrganizer(), IsEventOwner(), IsEventDraft()]
         return [permissions.AllowAny()]
     
     def get_queryset(self):

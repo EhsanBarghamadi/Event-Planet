@@ -99,9 +99,6 @@ class EventStageSerializer(serializers.ModelSerializer):
                 'event_id': 'رویداد الزامی است!'
             })
 
-        if event.status != Event.Status.DRAFT:
-            raise serializers.ValidationError({'event': 'تغییرات فقط روی رویدادهای پیش‌نویس (DRAFT) مجاز است.'})
-
         if self.instance:
             if 'event' in attrs:
                 if event != self.instance.event:

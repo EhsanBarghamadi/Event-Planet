@@ -1,7 +1,7 @@
 from rest_framework import viewsets
 from rest_framework import permissions
 
-from core.permissions import IsEventOwner
+from core.permissions import IsEventOwner, IsEventDraft
 from .serializers import AttributeSerializer, EventAttributeValueSerializer
 from .models import Attribute, EventAttributeValue
 
@@ -33,4 +33,4 @@ class EventAttributeValueViewSet(viewsets.ModelViewSet):
     def get_permissions(self):
         if self.action in ['retrieve', 'list']:
             return [permissions.IsAuthenticated()]
-        return [permissions.IsAuthenticated(), IsEventOwner()]
+        return [permissions.IsAuthenticated(), IsEventOwner(), IsEventDraft()]

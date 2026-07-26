@@ -40,11 +40,6 @@ class EventAttributeValueSerializer(serializers.ModelSerializer):
         if not event:
             raise serializers.ValidationError({'event': 'انتخاب رویداد الزامی است!'})
         
-        if event.status != Event.Status.DRAFT:
-            raise serializers.ValidationError({
-                'event': 'امکان ثبت ویژگی فقط روی رویداد های پیش نویس وجود دارد.'
-            })
-        
         if attribute:
             if attribute.data_type == "TEXT":
                 if value_int is not None or value_bool is not None or value_text is None:

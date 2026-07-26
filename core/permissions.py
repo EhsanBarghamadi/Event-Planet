@@ -48,3 +48,12 @@ class IsFeedbackOwner(permissions.BasePermission):
         if request.method in permissions.SAFE_METHODS:
             return True
         return obj.participant == request.user
+
+class IsEventDraft(permissions.BasePermission):
+    message = 'این عملیات فقط روی رویدادهای پیش‌نویس مجاز است.'
+
+    def has_object_permission(self, request, view, obj):
+        if request.method in permissions.SAFE_METHODS:
+            return True
+        event = obj if hasattr(obj, 'organizer') else getattr(obj, 'event', None)
+        return bool(event and event.status == 'DRAFT')

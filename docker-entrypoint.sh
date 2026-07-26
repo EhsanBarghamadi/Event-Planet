@@ -2,7 +2,7 @@
 set -e
 
 echo "Waiting for PostgreSQL to be ready and DNS to resolve..."
-while ! pg_isready -h "$DB_HOST" -p "$DB_PORT"; do
+while ! pg_isready -h "$DB_HOST" -p "$DB_PORT" -U "$DB_USERNAME"; do
   echo "Database is unavailable - sleeping..."
   sleep 1
 done
