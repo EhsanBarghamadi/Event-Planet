@@ -28,7 +28,9 @@ class EventViewSet(viewsets.ModelViewSet):
                 return Event.objects.filter(
                     Q(status='PUBLISHED') | Q(organizer=user)
                 ).distinct()
-            return Event.objects.filter(status='PUBLISHED')
+            return Event.objects.prefetch_related('registrations').filter(
+                    Q(status='PUBLISHED') | Q(registrations__participant=user)
+                ).distinct()
         return Event.objects.all()
     
     def get_permissions(self):
