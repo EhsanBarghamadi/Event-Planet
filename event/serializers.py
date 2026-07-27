@@ -1,8 +1,10 @@
 from rest_framework import serializers
 from django.utils import timezone
 from rest_framework.exceptions import PermissionDenied, ValidationError
+from django.db import transaction
 
 from attribute.serializers import EventAttributeValueSerializer
+from relation.models import Registration
 from .models import Event, EventStage
 
 class EventSerializer(serializers.ModelSerializer):
@@ -39,6 +41,7 @@ class EventSerializer(serializers.ModelSerializer):
             start_date = attrs.get('start_date')
             end_date = attrs.get('end_date')
 
+        new_capacity = attrs.get('capacity')
         new_status = attrs.get('status')
 
         if start_date and end_date:
@@ -64,11 +67,21 @@ class EventSerializer(serializers.ModelSerializer):
                     allowed_statuses = [status.value for status in allowed_list] if allowed_list else ['هیچکدام']
                     raise serializers.ValidationError({
                         'status': (
-                            f'تغییر وضعیت از {original_status} به {new_status} مجاز نیست'
+                            f'تغییر وضعیت از {original_status} به {new_status} مجاز نیست.'
                             f'وضعیت مجاز {", ".join(allowed_statuses)}'
                         )
                     })
-                
+
+            original_capacity = self.instance.capacity
+            if new_capacity and original_capacity != new_capacity:
+                with transaction.atomic():
+                    registration_num = Registration.objects.select_for_update().filter(
+                        event=self.instance
+                    ).count()
+                    if new_capacity < registration_num:
+                        raise serializers.ValidationError({
+                            'capacity': f'ظرفیت جدید ({new_capacity}) نمی‌تواند کمتر از تعداد ثبت‌نام‌های فعلی ({registration_num}) باشد'
+                        })
         return attrs
     
 class EventStageSerializer(serializers.ModelSerializer):
