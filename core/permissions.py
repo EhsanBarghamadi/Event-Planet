@@ -52,6 +52,16 @@ class IsFeedbackOwner(permissions.BasePermission):
 class IsEventDraft(permissions.BasePermission):
     message = 'این عملیات فقط روی رویدادهای پیش‌نویس مجاز است.'
 
+    def has_permission(self, request, view):
+        if view.action == 'create':
+            event_id = request.data.get('event_id') or request.data.get('event')
+            if not event_id:
+                return True
+
+            event = Event.objects.filter(id=event_id).first()
+            return bool(event and event.status == 'DRAFT')
+        return True
+
     def has_object_permission(self, request, view, obj):
         if request.method in permissions.SAFE_METHODS:
             return True
