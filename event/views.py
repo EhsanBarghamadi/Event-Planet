@@ -27,10 +27,15 @@ class EventViewSet(viewsets.ModelViewSet):
             return Event.objects.filter(
                 Q(status='PUBLISHED') | Q(organizer=user)
             ).distinct()
+        
+        if user.is_authenticated and user.role == 'STAFF':
+            return Event.objects.all()
+        
         if user.is_authenticated:
             return Event.objects.prefetch_related('registrations').filter(
                 Q(status='PUBLISHED') | Q(registrations__participant=user)
             ).distinct()
+        
         return Event.objects.filter(status='PUBLISHED')
     
     def get_permissions(self):
