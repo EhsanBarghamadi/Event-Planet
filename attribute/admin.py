@@ -5,6 +5,7 @@ from .models import Attribute, EventAttributeValue
 @admin.register(Attribute)
 class AttributeAdmin(admin.ModelAdmin):
     list_display = ['name', 'data_type']
+    readonly_fields = ['slug']
     list_filter = ['data_type']
     search_fields = ['name']
     search_help_text = 'جست و جو بر اساس نام ویژگی'

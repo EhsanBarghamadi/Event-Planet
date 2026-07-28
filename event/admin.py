@@ -4,6 +4,7 @@ from .models import Event, EventStage
 @admin.register(Event)
 class EventAdmin(admin.ModelAdmin):
     list_display = ['organizer', 'title', 'status', 'start_date', 'end_date']
+    readonly_fields = ['slug']
     search_fields = ['title',]
     search_help_text = 'بر اساس عنوان رویداد جست و جو کنید'
     list_filter = ['status',]
