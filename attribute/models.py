@@ -76,19 +76,19 @@ class EventAttributeValue(TimeStampedModel):
             data_type = self.attribute.data_type
 
             if data_type == Attribute.DataType.TEXT:
+                self.value_int = None
+                self.value_bool = None
                 if self.value_text is None or self.value_text == '':
                     raise ValidationError({'value_text': 'برای ویژگی متنی، وارد کردن این فیلد الزامی است.'})
-                if self.value_int is not None or self.value_bool is not None:
-                    raise ValidationError('برای ویژگی متنی، فیلدهای عددی و بولین باید خالی باشند.')
 
             elif data_type == Attribute.DataType.INTEGER:
+                self.value_text = None
+                self.value_bool = None
                 if self.value_int is None:
                     raise ValidationError({'value_int': 'برای ویژگی عددی، وارد کردن این فیلد الزامی است.'})
-                if self.value_text is not None or self.value_bool is not None:
-                    raise ValidationError('برای ویژگی عددی، فیلدهای متنی و بولین باید خالی باشند.')
 
             elif data_type == Attribute.DataType.BOOLEAN:
+                self.value_text = None
+                self.value_int = None
                 if self.value_bool is None:
                     raise ValidationError({'value_bool': 'برای ویژگی بولین، انتخاب این فیلد الزامی است.'})
-                if self.value_text is not None or self.value_int is not None:
-                    raise ValidationError('برای ویژگی بولین، فیلدهای متنی و عددی باید خالی باشند.')
