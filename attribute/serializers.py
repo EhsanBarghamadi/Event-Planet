@@ -12,7 +12,8 @@ class AttributeSerializer(serializers.ModelSerializer):
 class EventAttributeValueSerializer(serializers.ModelSerializer):
     created_at = serializers.ReadOnlyField()
     updated_at = serializers.ReadOnlyField()
-    
+
+    attribute = serializers.StringRelatedField()
     class Meta:
         model = EventAttributeValue
         fields = ['id', 'event', 'attribute', 'value_text', 'value_int', 'value_bool', 'created_at', 'updated_at']
