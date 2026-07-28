@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from rest_framework.validators import UniqueTogetherValidator
 
 from event.models import Event
 from .models import Attribute, EventAttributeValue
@@ -13,10 +14,20 @@ class EventAttributeValueSerializer(serializers.ModelSerializer):
     created_at = serializers.ReadOnlyField()
     updated_at = serializers.ReadOnlyField()
 
-    attribute = serializers.StringRelatedField()
+    attribute = serializers.SlugRelatedField(
+        slug_field='name',
+        queryset=Attribute.objects.all()
+    )
     class Meta:
         model = EventAttributeValue
         fields = ['id', 'event', 'attribute', 'value_text', 'value_int', 'value_bool', 'created_at', 'updated_at']
+        validators = [
+            UniqueTogetherValidator(
+                queryset=EventAttributeValue.objects.all(),
+                fields=['event', 'attribute'],
+                message='این ویژگی قبلاً برای این رویداد ثبت شده است.'
+            )
+        ]
 
     def validate(self, attrs):
         if self.instance:
