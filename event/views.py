@@ -23,12 +23,10 @@ class EventViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         user = self.request.user
-        if self.action in ['list', 'retrieve']:
-            if user.is_authenticated and user.role == 'ORGANIZER':
-                return Event.objects.filter(
-                    Q(status='PUBLISHED') | Q(organizer=user)
-                ).distinct()
-            
+        if user.is_authenticated and user.role == 'ORGANIZER':
+            return Event.objects.filter(
+                Q(status='PUBLISHED') | Q(organizer=user)
+            ).distinct()
         if user.is_authenticated:
             return Event.objects.prefetch_related('registrations').filter(
                 Q(status='PUBLISHED') | Q(registrations__participant=user)
