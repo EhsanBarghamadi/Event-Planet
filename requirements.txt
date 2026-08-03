@@ -12,7 +12,6 @@ inflection==0.5.1
 jsonschema==4.26.0
 jsonschema-specifications==2025.9.1
 Markdown==3.10.2
-psycopg2==2.9.11
 psycopg2-binary==2.9.11
 pydot==3.0.4
 PyJWT==2.13.0

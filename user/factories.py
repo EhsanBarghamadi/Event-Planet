@@ -4,8 +4,13 @@ from .models import CustomUser
 
 
 class CustomUserFactory(factory.django.DjangoModelFactory):
+
     class Meta:
         model = CustomUser
+
+    class Params:
+        organizer = factory.Trait(role = CustomUser.Roles.ORGANIZER)
+        participant = factory.Trait(role = CustomUser.Roles.PARTICIPANT)
 
     phone = factory.Sequence(lambda n: f'0{9000000000 + n}')
     first_name = factory.Faker('first_name')
@@ -18,9 +23,3 @@ class CustomUserFactory(factory.django.DjangoModelFactory):
             return 
         self.set_password(extracted if extracted else '1234')
         self.save()
-
-class OrganizerFactory(CustomUserFactory):
-    role = CustomUser.Roles.ORGANIZER
-
-class ParticipantFactory(CustomUserFactory):
-    role = CustomUser.Roles.PARTICIPANT
