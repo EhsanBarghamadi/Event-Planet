@@ -3,56 +3,52 @@ from core.models import TimeStampedModel, SluggedModel
 from event.models import Event
 from django.core.exceptions import ValidationError
 
+
 class Attribute(SluggedModel):
 
     class DataType(models.TextChoices):
-        TEXT = 'TEXT', 'متنی'
-        INTEGER = 'INTEGER', 'عددی'
-        BOOLEAN = 'BOOLEAN', 'بولین (بله/خیر)'
+        TEXT = "TEXT", "متنی"
+        INTEGER = "INTEGER", "عددی"
+        BOOLEAN = "BOOLEAN", "بولین (بله/خیر)"
 
-    name = models.CharField(
-        max_length=100,
-        unique=True,
-        verbose_name='نام ویژگی'
-    )
+    name = models.CharField(max_length=100, unique=True, verbose_name="نام ویژگی")
     data_type = models.CharField(
-        max_length=15,
-        choices=DataType.choices,
-        verbose_name='نوع داده‌ای'
+        max_length=15, choices=DataType.choices, verbose_name="نوع داده‌ای"
     )
 
     class Meta:
-        verbose_name = 'ویژگی داینامیک'
-        verbose_name_plural = 'ویژگی‌های داینامیک'
+        verbose_name = "ویژگی داینامیک"
+        verbose_name_plural = "ویژگی‌های داینامیک"
 
     def __str__(self):
         return f"{self.name} ({self.get_data_type_display()})"
-    
+
     def get_slug_source_field(self):
         return "name"
+
 
 class EventAttributeValue(TimeStampedModel):
 
     event = models.ForeignKey(
         Event,
         on_delete=models.CASCADE,
-        related_name='attribute_values',
-        verbose_name='رویداد'
+        related_name="attribute_values",
+        verbose_name="رویداد",
     )
     attribute = models.ForeignKey(
         Attribute,
         on_delete=models.CASCADE,
-        related_name='event_values',
-        verbose_name='ویژگی'
+        related_name="event_values",
+        verbose_name="ویژگی",
     )
-    value_text = models.TextField(blank=True, null=True, verbose_name='مقدار متنی')
-    value_int = models.IntegerField(blank=True, null=True, verbose_name='مقدار عددی')
-    value_bool = models.BooleanField(blank=True, null=True, verbose_name='مقدار بولین')
+    value_text = models.TextField(blank=True, null=True, verbose_name="مقدار متنی")
+    value_int = models.IntegerField(blank=True, null=True, verbose_name="مقدار عددی")
+    value_bool = models.BooleanField(blank=True, null=True, verbose_name="مقدار بولین")
 
     class Meta:
-        verbose_name = 'مقدار ویژگی رویداد'
-        verbose_name_plural = 'مقادیر ویژگی‌های رویداد'
-        unique_together = ('event', 'attribute')
+        verbose_name = "مقدار ویژگی رویداد"
+        verbose_name_plural = "مقادیر ویژگی‌های رویداد"
+        unique_together = ("event", "attribute")
 
     def __str__(self):
         return f"{self.event.title} -> {self.attribute.name}"
@@ -68,27 +64,33 @@ class EventAttributeValue(TimeStampedModel):
         return None
 
     def clean(self):
-            super().clean()
-            
-            if not hasattr(self, 'attribute'):
-                return
+        super().clean()
 
-            data_type = self.attribute.data_type
+        if not hasattr(self, "attribute"):
+            return
 
-            if data_type == Attribute.DataType.TEXT:
-                self.value_int = None
-                self.value_bool = None
-                if self.value_text is None or self.value_text == '':
-                    raise ValidationError({'value_text': 'برای ویژگی متنی، وارد کردن این فیلد الزامی است.'})
+        data_type = self.attribute.data_type
 
-            elif data_type == Attribute.DataType.INTEGER:
-                self.value_text = None
-                self.value_bool = None
-                if self.value_int is None:
-                    raise ValidationError({'value_int': 'برای ویژگی عددی، وارد کردن این فیلد الزامی است.'})
+        if data_type == Attribute.DataType.TEXT:
+            self.value_int = None
+            self.value_bool = None
+            if self.value_text is None or self.value_text == "":
+                raise ValidationError(
+                    {"value_text": "برای ویژگی متنی، وارد کردن این فیلد الزامی است."}
+                )
 
-            elif data_type == Attribute.DataType.BOOLEAN:
-                self.value_text = None
-                self.value_int = None
-                if self.value_bool is None:
-                    raise ValidationError({'value_bool': 'برای ویژگی بولین، انتخاب این فیلد الزامی است.'})
+        elif data_type == Attribute.DataType.INTEGER:
+            self.value_text = None
+            self.value_bool = None
+            if self.value_int is None:
+                raise ValidationError(
+                    {"value_int": "برای ویژگی عددی، وارد کردن این فیلد الزامی است."}
+                )
+
+        elif data_type == Attribute.DataType.BOOLEAN:
+            self.value_text = None
+            self.value_int = None
+            if self.value_bool is None:
+                raise ValidationError(
+                    {"value_bool": "برای ویژگی بولین، انتخاب این فیلد الزامی است."}
+                )

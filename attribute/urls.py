@@ -4,9 +4,11 @@ from .views import EventAttributeValueViewSet, AttributeViewSet
 
 router = DefaultRouter()
 
-router.register(r'eventattributevalue', EventAttributeValueViewSet, basename='eventattributevalue')
-router.register(r'attribute', AttributeViewSet, basename='attribute')
+router.register(
+    r"eventattributevalue", EventAttributeValueViewSet, basename="eventattributevalue"
+)
+router.register(r"attribute", AttributeViewSet, basename="attribute")
 
 urlpatterns = [
-    path('', include(router.urls)),
+    path("", include(router.urls)),
 ]

@@ -5,14 +5,20 @@ from django.db import transaction
 from core.permissions import IsParticipant, IsEventOwner, IsOrganizer, IsFeedbackOwner
 from event.models import Event
 from .models import Registration, Feedback, Result
-from .serializers import RegistrationSerializer, FeedbackSerializer, ResultSerializer, RegistrationReadOnlySerializer
+from .serializers import (
+    RegistrationSerializer,
+    FeedbackSerializer,
+    ResultSerializer,
+    RegistrationReadOnlySerializer,
+)
+
 
 class RegistrationViewSet(viewsets.ModelViewSet):
     serializer_class = RegistrationSerializer
-    http_method_names = ['get', 'post', 'delete']
-    
+    http_method_names = ["get", "post", "delete"]
+
     def get_permissions(self):
-        if self.action == 'create':
+        if self.action == "create":
             return [permissions.IsAuthenticated(), IsParticipant()]
         return [permissions.IsAuthenticated()]
 
@@ -21,15 +27,16 @@ class RegistrationViewSet(viewsets.ModelViewSet):
 
         if getattr(self, "swagger_fake_view", False):
             return Registration.objects.none()
-        
-        return Registration.objects.select_related('event').filter(participant=user)
+
+        return Registration.objects.select_related("event").filter(participant=user)
 
     @transaction.atomic
     def create(self, request, *args, **kwargs):
         return super().create(request, *args, **kwargs)
-    
+
     def perform_create(self, serializer):
         serializer.save(participant=self.request.user)
+
 
 class FeedbackViewSet(viewsets.ModelViewSet):
     serializer_class = FeedbackSerializer
@@ -38,29 +45,30 @@ class FeedbackViewSet(viewsets.ModelViewSet):
         user = self.request.user
         if getattr(self, "swagger_fake_view", False):
             return Feedback.objects.none()
-        if user.role == 'PARTICIPANT':
+        if user.role == "PARTICIPANT":
             return Feedback.objects.filter(participant=user)
-        if user.role == 'ORGANIZER' and user.events.exists():
+        if user.role == "ORGANIZER" and user.events.exists():
             return Feedback.objects.filter(event__organizer=user)
         return Feedback.objects.none()
-    
+
     def get_permissions(self):
-        if self.action == 'create':
+        if self.action == "create":
             return [permissions.IsAuthenticated(), IsParticipant()]
-        elif self.action in ['update', 'partial_update', 'destroy']:
+        elif self.action in ["update", "partial_update", "destroy"]:
             return [permissions.IsAuthenticated(), IsParticipant(), IsFeedbackOwner()]
         return [permissions.IsAuthenticated()]
-    
+
     def perform_create(self, serializer):
         serializer.save(participant=self.request.user)
+
 
 class ResultViewSet(viewsets.ModelViewSet):
     serializer_class = ResultSerializer
 
     def get_permissions(self):
-        if self.action in ['create', 'partial_update', 'update', 'destroy']:
+        if self.action in ["create", "partial_update", "update", "destroy"]:
             return [permissions.IsAuthenticated(), IsOrganizer(), IsEventOwner()]
         return [permissions.AllowAny()]
 
     def get_queryset(self):
-        return Result.objects.filter(event__status='FINISHED')
+        return Result.objects.filter(event__status="FINISHED")

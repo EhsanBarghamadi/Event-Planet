@@ -1,9 +1,9 @@
 from decouple import config
 
-env = config('DJANGO_ENV', default='dev').lower()
+env = config("DJANGO_ENV", default="dev").lower()
 
-if env == 'prod':
+if env == "prod":
     from .prod import *
-    
-elif env == 'dev':
+
+elif env == "dev":
     from .dev import *

@@ -6,34 +6,39 @@ from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError as DjangoValidationError
 from .models import CustomUser
 
+
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
-    
+
     def validate(self, attrs):
         data = super().validate(attrs)
-        data['first_name'] = self.user.first_name
-        data['last_name'] = self.user.last_name
-        data['role'] = self.user.role
-        data['phone'] = self.user.phone
+        data["first_name"] = self.user.first_name
+        data["last_name"] = self.user.last_name
+        data["role"] = self.user.role
+        data["phone"] = self.user.phone
         return data
-    
+
+
 class UserRegisterSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
+
     class Meta:
         model = CustomUser
-        fields = ['phone', 'first_name', 'last_name', 'role', 'password']
+        fields = ["phone", "first_name", "last_name", "role", "password"]
 
     def validate_role(self, value):
         allowed_roles = [CustomUser.Roles.ORGANIZER, CustomUser.Roles.PARTICIPANT]
-        
+
         if value not in allowed_roles:
-            raise serializers.ValidationError('انتخاب این نقش در ثبت‌نام عمومی مجاز نیست.')
+            raise serializers.ValidationError(
+                "انتخاب این نقش در ثبت‌نام عمومی مجاز نیست."
+            )
         return value
-    
+
     def validate_phone(self, value):
         pattern = r"^(\+98|0)?9\d{9}$"
         match = re.match(pattern, value)
         if not match:
-            raise serializers.ValidationError('شماره وارد شده معتبر نیست!')
+            raise serializers.ValidationError("شماره وارد شده معتبر نیست!")
         return value
 
     def validate_password(self, value):
@@ -42,31 +47,34 @@ class UserRegisterSerializer(serializers.ModelSerializer):
         except DjangoValidationError as e:
             raise serializers.ValidationError(list(e.messages))
         return value
-    
+
     def create(self, validated_data):
-        phone = validated_data.pop('phone')
-        password = validated_data.pop('password')
+        phone = validated_data.pop("phone")
+        password = validated_data.pop("password")
         user = CustomUser.objects.create_user(phone, password, **validated_data)
         return user
-    
-class UserLoginSerializer(serializers.Serializer):
-        phone = serializers.CharField(write_only=True)
-        password = serializers.CharField(write_only=True)
 
-        def validate(self, attrs):
-            request = self.context.get('request')
-            phone = attrs.get('phone')
-            password = attrs.get('password')
-            user = authenticate(request, username=phone, password=password)
-            if user is None:
-                raise serializers.ValidationError('نام کاربری یا رمز عبور اشتباه است')
-            attrs['user'] = user
-            return attrs
-        
+
+class UserLoginSerializer(serializers.Serializer):
+    phone = serializers.CharField(write_only=True)
+    password = serializers.CharField(write_only=True)
+
+    def validate(self, attrs):
+        request = self.context.get("request")
+        phone = attrs.get("phone")
+        password = attrs.get("password")
+        user = authenticate(request, username=phone, password=password)
+        if user is None:
+            raise serializers.ValidationError("نام کاربری یا رمز عبور اشتباه است")
+        attrs["user"] = user
+        return attrs
+
+
 class UserReadOnlySerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
-        fields = ['id', 'phone', 'first_name', 'last_name', 'role']
+        fields = ["id", "phone", "first_name", "last_name", "role"]
+
 
 class EmptyLogoutSerializer(serializers.Serializer):
     pass

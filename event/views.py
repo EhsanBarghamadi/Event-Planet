@@ -18,59 +18,71 @@ from .serializers import EventSerializer, EventStageSerializer
 class EventViewSet(viewsets.ModelViewSet):
     serializer_class = EventSerializer
     filter_backends = [DjangoFilterBackend, SearchFilter]
-    filterset_fields = ['status']
-    search_fields = ['title', 'description']
+    filterset_fields = ["status"]
+    search_fields = ["title", "description"]
 
     def get_queryset(self):
         user = self.request.user
-        if user.is_authenticated and user.role == 'ORGANIZER':
+        if user.is_authenticated and user.role == "ORGANIZER":
             return Event.objects.filter(
-                Q(status='PUBLISHED') | Q(organizer=user)
+                Q(status="PUBLISHED") | Q(organizer=user)
             ).distinct()
-        
-        if user.is_authenticated and user.role == 'STAFF':
+
+        if user.is_authenticated and user.role == "STAFF":
             return Event.objects.all()
-        
+
         if user.is_authenticated:
-            return Event.objects.prefetch_related('registrations').filter(
-                Q(status='PUBLISHED') | Q(registrations__participant=user)
-            ).distinct()
-        
-        return Event.objects.filter(status='PUBLISHED')
-    
+            return (
+                Event.objects.prefetch_related("registrations")
+                .filter(Q(status="PUBLISHED") | Q(registrations__participant=user))
+                .distinct()
+            )
+
+        return Event.objects.filter(status="PUBLISHED")
+
     def get_permissions(self):
-        if self.action == 'create':
+        if self.action == "create":
             return [permissions.IsAuthenticated(), IsOrganizer()]
-        if self.action in ['update', 'partial_update', 'destroy']:
+        if self.action in ["update", "partial_update", "destroy"]:
             return [permissions.IsAuthenticated(), IsOrganizer(), IsEventOwner()]
-        if self.action == 'participants':
+        if self.action == "participants":
             return [permissions.IsAuthenticated(), IsOrganizer()]
         return [permissions.AllowAny()]
-    
+
     def perform_create(self, serializer):
         serializer.save(organizer=self.request.user)
 
-    @action(detail=True, methods=['get'])
+    @action(detail=True, methods=["get"])
     def participants(self, request, pk=None, *args, **kwargs):
         event = Event.objects.filter(id=pk, organizer=request.user)
         if not event.exists():
-            raise PermissionDenied('شما مالک این رویداد نیستید یا چنین رویدادی وجود ندارد!')
-        registrations = Registration.objects.filter(event_id=pk).select_related('participant')
+            raise PermissionDenied(
+                "شما مالک این رویداد نیستید یا چنین رویدادی وجود ندارد!"
+            )
+        registrations = Registration.objects.filter(event_id=pk).select_related(
+            "participant"
+        )
         serializer = RegistrationReadOnlySerializer(registrations, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
-    
 
 
 class EventStageViewSet(viewsets.ModelViewSet):
     serializer_class = EventStageSerializer
 
     def get_permissions(self):
-        if self.action in ['create', 'update', 'partial_update', 'destroy']:
-            return [permissions.IsAuthenticated(), IsOrganizer(), IsEventOwner(), IsEventDraft()]
+        if self.action in ["create", "update", "partial_update", "destroy"]:
+            return [
+                permissions.IsAuthenticated(),
+                IsOrganizer(),
+                IsEventOwner(),
+                IsEventDraft(),
+            ]
         return [permissions.AllowAny()]
-    
+
     def get_queryset(self):
         user = self.request.user
-        if user.is_authenticated and user.role == 'ORGANIZER':
-            return EventStage.objects.filter(event__status='PUBLISHED') | EventStage.objects.filter(event__organizer=user)
-        return  EventStage.objects.filter(event__status='PUBLISHED')
+        if user.is_authenticated and user.role == "ORGANIZER":
+            return EventStage.objects.filter(
+                event__status="PUBLISHED"
+            ) | EventStage.objects.filter(event__organizer=user)
+        return EventStage.objects.filter(event__status="PUBLISHED")
