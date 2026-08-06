@@ -10,6 +10,10 @@ class EventFactory(factory.django.DjangoModelFactory):
 
     class Params:
         published = factory.Trait(status = Event.Status.PUBLISHED)
+        ongoing = factory.Trait(status = Event.Status.ONGOING)
+        closed = factory.Trait(status = Event.Status.CLOSED)
+        finished = factory.Trait(status = Event.Status.FINISHED)
+        cancelled = factory.Trait(status = Event.Status.CANCELLED)
 
     organizer = factory.SubFactory(
         "user.factories.CustomUserFactory",
