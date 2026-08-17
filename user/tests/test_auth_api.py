@@ -236,3 +236,56 @@ def test_logout_jwt_token_without_authorization(api_client):
     response_logout = api_client.post(logout_url, data=data)
 
     assert response_logout.status_code == status.HTTP_401_UNAUTHORIZED
+
+
+@pytest.mark.django_db
+def test_login_user_with_session_success(api_client):
+    user = CustomUserFactory(phone="09000000000", password="StrongPass9!x")
+    login_url = reverse("login", kwargs={"version": "v1"})
+    user_data = {"phone": user.phone, "password": "StrongPass9!x"}
+
+    response = api_client.post(login_url, data=user_data)
+
+    assert response.status_code == status.HTTP_200_OK
+    assert "first_name" in response.data["user"]
+    assert "role" in response.data["user"]
+    assert "phone" in response.data["user"]
+    assert response.data["user"]["first_name"] == user.first_name
+    assert response.data["user"]["role"] == user.role
+    assert response.data["user"]["phone"] == user.phone
+
+
+@pytest.mark.django_db
+def test_login_user_session_with_wrong_password(api_client):
+    user = CustomUserFactory(phone="09000000000", password="StrongPass9!x")
+    login_url = reverse("login", kwargs={"version": "v1"})
+    user_data = {"phone": user.phone, "password": "WrongPassword"}
+
+    response = api_client.post(login_url, data=user_data)
+
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
+
+
+@pytest.mark.django_db
+def test_logout_user_session_success(api_client):
+    user = CustomUserFactory(phone="09000000000", password="StrongPass9!x")
+    login_url = reverse("login", kwargs={"version": "v1"})
+    user_data = {"phone": user.phone, "password": "StrongPass9!x"}
+
+    login_response = api_client.post(login_url, data=user_data)
+
+    assert login_response.status_code == status.HTTP_200_OK
+
+    logout_url = reverse("logout", kwargs={"version": "v1"})
+    logout_response = api_client.post(logout_url)
+
+    assert logout_response.status_code == status.HTTP_200_OK
+
+
+@pytest.mark.django_db
+def test_logout_user_session_without_authorization(api_client):
+    logout_url = reverse("logout", kwargs={"version": "v1"})
+
+    response = api_client.post(logout_url)
+
+    assert response.status_code == status.HTTP_401_UNAUTHORIZED
