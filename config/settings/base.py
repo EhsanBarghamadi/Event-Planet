@@ -121,6 +121,10 @@ REST_FRAMEWORK = {
     "DEFAULT_VERSION": "v1",
 }
 
+SIMPLE_JWT = {
+    "SIGNING_KEY": config("JWT_SIGNING_KEY"),
+}
+
 SPECTACULAR_SETTINGS = {
     "TITLE": "Event Planet API",
     "DESCRIPTION": "Event Planet description",

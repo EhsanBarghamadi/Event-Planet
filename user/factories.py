@@ -7,6 +7,7 @@ class CustomUserFactory(factory.django.DjangoModelFactory):
 
     class Meta:
         model = CustomUser
+        skip_postgeneration_save=True
 
     class Params:
         organizer = factory.Trait(role=CustomUser.Roles.ORGANIZER)
