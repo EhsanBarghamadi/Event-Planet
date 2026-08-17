@@ -149,3 +149,90 @@ def test_refresh_jwt_token_success(api_client):
 
     assert response_refresh.status_code == status.HTTP_200_OK
     assert "access" in response_refresh.data
+
+
+@pytest.mark.django_db
+def test_logout_jwt_token_success(api_client):
+    user = CustomUserFactory(phone="09000000000", password="StrongPass9!x")
+    login_url = reverse("token_obtain_pair", kwargs={"version": "v1"})
+    user_data = {"phone": user.phone, "password": "StrongPass9!x"}
+
+    response_login = api_client.post(login_url, data=user_data)
+
+    assert response_login.status_code == status.HTTP_200_OK
+    assert "access" in response_login.data
+    assert "refresh" in response_login.data
+
+    data = {"refresh": response_login.data["refresh"]}
+    logout_url = reverse("auth_logout", kwargs={"version": "v1"})
+
+    api_client.credentials(HTTP_AUTHORIZATION=f"Bearer {response_login.data['access']}")
+    response_logout = api_client.post(logout_url, data=data)
+
+    assert response_logout.status_code == status.HTTP_205_RESET_CONTENT
+
+
+@pytest.mark.django_db
+def test_refresh_token_is_blacklisted_after_logout(api_client):
+    user = CustomUserFactory(phone="09000000000", password="StrongPass9!x")
+    login_url = reverse("token_obtain_pair", kwargs={"version": "v1"})
+    user_data = {"phone": user.phone, "password": "StrongPass9!x"}
+
+    response_login = api_client.post(login_url, data=user_data)
+
+    assert response_login.status_code == status.HTTP_200_OK
+    assert "access" in response_login.data
+    assert "refresh" in response_login.data
+
+    data = {"refresh": response_login.data["refresh"]}
+    logout_url = reverse("auth_logout", kwargs={"version": "v1"})
+
+    api_client.credentials(HTTP_AUTHORIZATION=f"Bearer {response_login.data['access']}")
+    response_logout = api_client.post(logout_url, data=data)
+
+    assert response_logout.status_code == status.HTTP_205_RESET_CONTENT
+
+    refresh_url = reverse("token_refresh", kwargs={"version": "v1"})
+    response_refresh = api_client.post(refresh_url, data=data)
+    api_client.credentials()
+    assert response_refresh.status_code == status.HTTP_401_UNAUTHORIZED
+
+
+@pytest.mark.django_db
+def test_logout_jwt_token_without_refresh_token(api_client):
+    user = CustomUserFactory(phone="09000000000", password="StrongPass9!x")
+    login_url = reverse("token_obtain_pair", kwargs={"version": "v1"})
+    user_data = {"phone": user.phone, "password": "StrongPass9!x"}
+
+    response_login = api_client.post(login_url, data=user_data)
+
+    assert response_login.status_code == status.HTTP_200_OK
+    assert "access" in response_login.data
+    assert "refresh" in response_login.data
+
+    logout_url = reverse("auth_logout", kwargs={"version": "v1"})
+
+    api_client.credentials(HTTP_AUTHORIZATION=f"Bearer {response_login.data['access']}")
+    response_logout = api_client.post(logout_url, data={})
+
+    assert response_logout.status_code == status.HTTP_400_BAD_REQUEST
+
+
+@pytest.mark.django_db
+def test_logout_jwt_token_without_authorization(api_client):
+    user = CustomUserFactory(phone="09000000000", password="StrongPass9!x")
+    login_url = reverse("token_obtain_pair", kwargs={"version": "v1"})
+    user_data = {"phone": user.phone, "password": "StrongPass9!x"}
+
+    response_login = api_client.post(login_url, data=user_data)
+
+    assert response_login.status_code == status.HTTP_200_OK
+    assert "access" in response_login.data
+    assert "refresh" in response_login.data
+
+    data = {"refresh": response_login.data["refresh"]}
+    logout_url = reverse("auth_logout", kwargs={"version": "v1"})
+
+    response_logout = api_client.post(logout_url, data=data)
+
+    assert response_logout.status_code == status.HTTP_401_UNAUTHORIZED
