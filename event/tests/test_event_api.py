@@ -45,7 +45,7 @@ def test_guest_can_retrieve_published_event(api_client):
 
 
 @pytest.mark.django_db
-def test_organizer_can_see_published_events_and_own_drafts(api_client):
+def test_organizer_can_see_published_events_and_own_drafts(get_auth_client):
     organizer = CustomUserFactory(organizer=True, password="StrongPass9!x")
     other_organizer = CustomUserFactory(organizer=True)
     my_draft = EventFactory(organizer=organizer)
@@ -53,19 +53,11 @@ def test_organizer_can_see_published_events_and_own_drafts(api_client):
     other_draft = EventFactory(organizer=other_organizer)
     other_published = EventFactory(organizer=other_organizer, published=True)
 
-    login_url = reverse("token_obtain_pair", kwargs={"version": "v1"})
-    organizer_data = {"phone": organizer.phone, "password": "StrongPass9!x"}
+    client = get_auth_client(organizer, password="StrongPass9!x")
 
-    login_response = api_client.post(login_url, data=organizer_data)
-
-    assert login_response.status_code == status.HTTP_200_OK
-    assert "refresh" in login_response.data
-    assert "access" in login_response.data
-
-    api_client.credentials(HTTP_AUTHORIZATION=f"Bearer {login_response.data['access']}")
     event_list_url = reverse("event-list", kwargs={"version": "v1"})
 
-    response = api_client.get(event_list_url)
+    response = client.get(event_list_url)
 
     assert response.status_code == status.HTTP_200_OK
     assert any(event["id"] == my_draft.id for event in response.data)
