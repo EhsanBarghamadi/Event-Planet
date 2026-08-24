@@ -64,3 +64,28 @@ def test_organizer_can_see_published_events_and_own_drafts(get_auth_client):
     assert any(event["id"] == my_published.id for event in response.data)
     assert any(event["id"] == other_published.id for event in response.data)
     assert all(event["id"] != other_draft.id for event in response.data)
+
+@pytest.mark.django_db
+def test_organizer_can_create_event(get_auth_client):
+    organizer = CustomUserFactory(organizer=True, password="StrongPass9!x")
+    other_organizer = CustomUserFactory(organizer=True)
+
+    event_url = reverse("event-list", kwargs={"version": "v1"})
+
+    event_data = {
+        "organizer": other_organizer.id,
+        "capacity": 150,
+        "end_date": "2026-12-20T18:00:00Z",
+        "start_date": "2026-11-01T09:00:00Z",
+        "title": "همایش تخصصی هوش مصنوعی و یادگیری ماشین",
+        "description": "این همایش با هدف آشنایی با جدیدترین دستاوردهای حوزه هوش مصنوعی و کاربردهای آن در صنعت برگزار می‌شود. حضور برای عموم آزاد است.",
+        "status": "DRAFT"
+        }
+
+    client = get_auth_client(organizer, password="StrongPass9!x")
+    response = client.post(event_url, data=event_data)
+
+    assert response.status_code == status.HTTP_201_CREATED
+    assert response.data["organizer"] == organizer.id
+    assert response.data["status"] == "DRAFT"
+    assert response.data["capacity"] == 150
