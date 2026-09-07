@@ -236,7 +236,6 @@ def test_organizer_cannot_set_capacity_below_registration_count(get_auth_client)
     RegistrationFactory(participant=participant2, event=event)
     RegistrationFactory(participant=participant3, event=event)
 
-
     client = get_auth_client(organizer, password="StrongPass9!x")
 
     event_detail_url = reverse("event-detail", kwargs={"version": "v1", "pk": event.id})
@@ -246,3 +245,80 @@ def test_organizer_cannot_set_capacity_below_registration_count(get_auth_client)
     response = client.patch(event_detail_url, data)
 
     assert response.status_code == status.HTTP_400_BAD_REQUEST
+
+
+@pytest.mark.django_db
+def test_event_owner_can_see_participants(get_auth_client):
+    organizer = CustomUserFactory(organizer=True, password="StrongPass9!x")
+
+    event = EventFactory(published=True, organizer=organizer, capacity=5)
+
+    participant1 = CustomUserFactory(participant=True)
+    participant2 = CustomUserFactory(participant=True)
+    participant3 = CustomUserFactory(participant=True)
+
+    RegistrationFactory(participant=participant1, event=event)
+    RegistrationFactory(participant=participant2, event=event)
+    RegistrationFactory(participant=participant3, event=event)
+
+    client = get_auth_client(organizer, password="StrongPass9!x")
+
+    event_participants_url = reverse(
+        "event-participants",
+        kwargs={"version": "v1", "pk": event.id},
+    )
+
+    response = client.get(event_participants_url)
+
+    assert response.status_code == status.HTTP_200_OK
+    assert len(response.data) == 3
+    assert {item["participant"]["id"] for item in response.data} == {
+        participant1.id,
+        participant2.id,
+        participant3.id,
+    }
+
+
+@pytest.mark.django_db
+def test_organizer_cannot_see_other_organizers_participants(get_auth_client):
+    organizer = CustomUserFactory(organizer=True, password="StrongPass9!x")
+    other_organizer = CustomUserFactory(organizer=True, password="StrongPass9!x")
+
+    event = EventFactory(published=True, organizer=organizer, capacity=5)
+
+    participant1 = CustomUserFactory(participant=True)
+    participant2 = CustomUserFactory(participant=True)
+    participant3 = CustomUserFactory(participant=True)
+
+    RegistrationFactory(participant=participant1, event=event)
+    RegistrationFactory(participant=participant2, event=event)
+    RegistrationFactory(participant=participant3, event=event)
+
+    client = get_auth_client(other_organizer, password="StrongPass9!x")
+
+    event_participants_url = reverse(
+        "event-participants",
+        kwargs={"version": "v1", "pk": event.id},
+    )
+
+    response = client.get(event_participants_url)
+
+    assert response.status_code == status.HTTP_403_FORBIDDEN
+    assert response.data["detail"].code == "permission_denied"
+
+
+@pytest.mark.django_db
+def test_participant_cannot_see_event_participants(get_auth_client):
+    participant = CustomUserFactory(participant=True, password="StrongPass9!x")
+    event = EventFactory(published=True, capacity=5)
+
+    client = get_auth_client(participant, password="StrongPass9!x")
+
+    event_participants_url = reverse(
+        "event-participants",
+        kwargs={"version": "v1", "pk": event.id},
+    )
+
+    response = client.get(event_participants_url)
+
+    assert response.status_code == status.HTTP_403_FORBIDDEN
