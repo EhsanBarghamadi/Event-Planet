@@ -2,7 +2,7 @@ import pytest
 from django.urls import reverse
 from rest_framework import status
 
-from event.factories import EventFactory
+from event.factories import EventFactory, EventStageFactory
 from relation.factories import RegistrationFactory
 from user.factories import CustomUserFactory
 
@@ -206,23 +206,6 @@ def test_organizer_cannot_finish_draft_event(get_auth_client):
 
 
 @pytest.mark.django_db
-def test_organizer_cannot_finish_draft_event(get_auth_client):
-    organizer = CustomUserFactory(organizer=True, password="StrongPass9!x")
-
-    event = EventFactory(organizer=organizer)
-
-    client = get_auth_client(organizer, password="StrongPass9!x")
-
-    data = {"status": "FINISHED"}
-
-    event_detail_url = reverse("event-detail", kwargs={"version": "v1", "pk": event.id})
-
-    response = client.patch(event_detail_url, data)
-
-    assert response.status_code == status.HTTP_400_BAD_REQUEST
-
-
-@pytest.mark.django_db
 def test_organizer_cannot_set_capacity_below_registration_count(get_auth_client):
     organizer = CustomUserFactory(organizer=True, password="StrongPass9!x")
 
@@ -322,3 +305,106 @@ def test_participant_cannot_see_event_participants(get_auth_client):
     response = client.get(event_participants_url)
 
     assert response.status_code == status.HTTP_403_FORBIDDEN
+
+
+@pytest.mark.django_db
+def test_event_owner_can_create_stage_for_draft_event(get_auth_client):
+    organizer = CustomUserFactory(organizer=True, password="StrongPass9!x")
+    event = EventFactory(
+        organizer=organizer,
+        start_date="2027-01-18T12:50:58.048Z",
+        end_date="2027-05-12T02:54:53.468Z",
+    )
+    client = get_auth_client(organizer, password="StrongPass9!x")
+    eventstage_list_url = reverse("eventstage-list", kwargs={"version": "v1"})
+
+    data = {
+        "event_id": event.id,
+        "order": 1,
+        "end_time": "2027-02-12T12:00:00.048Z",
+        "start_time": "2027-02-12T10:00:00.468Z",
+        "title": "جلسه اول",
+        "description": "جلسه مربوط به توضیحات دوره",
+    }
+
+    response = client.post(eventstage_list_url, data)
+
+    assert response.status_code == status.HTTP_201_CREATED
+    assert response.data["event"]["id"] == event.id
+    assert response.data["event"]["organizer"] == organizer.id
+
+
+@pytest.mark.django_db
+def test_event_owner_cannot_create_stage_for_published_event(get_auth_client):
+    organizer = CustomUserFactory(organizer=True, password="StrongPass9!x")
+    event = EventFactory(
+        published=True,
+        organizer=organizer,
+        start_date="2027-01-18T12:50:58.048Z",
+        end_date="2027-05-12T02:54:53.468Z",
+    )
+    client = get_auth_client(organizer, password="StrongPass9!x")
+    eventstage_list_url = reverse("eventstage-list", kwargs={"version": "v1"})
+
+    data = {
+        "event_id": event.id,
+        "order": 1,
+        "end_time": "2027-02-12T12:00:00.048Z",
+        "start_time": "2027-02-12T10:00:00.468Z",
+        "title": "جلسه اول",
+        "description": "جلسه مربوط به توضیحات دوره",
+    }
+
+    response = client.post(eventstage_list_url, data)
+
+    assert response.status_code == status.HTTP_403_FORBIDDEN
+
+
+@pytest.mark.django_db
+def test_other_organizer_cannot_create_stage_for_event(get_auth_client):
+    organizer = CustomUserFactory(organizer=True, password="StrongPass9!x")
+    other_organizer = CustomUserFactory(organizer=True, password="StrongPass9!x")
+    event = EventFactory(
+        organizer=organizer,
+        start_date="2027-01-18T12:50:58.048Z",
+        end_date="2027-05-12T02:54:53.468Z",
+    )
+    client = get_auth_client(other_organizer, password="StrongPass9!x")
+    eventstage_list_url = reverse("eventstage-list", kwargs={"version": "v1"})
+
+    data = {
+        "event_id": event.id,
+        "order": 1,
+        "end_time": "2027-02-12T12:00:00.048Z",
+        "start_time": "2027-02-12T10:00:00.468Z",
+        "title": "جلسه اول",
+        "description": "جلسه مربوط به توضیحات دوره",
+    }
+
+    response = client.post(eventstage_list_url, data)
+
+    assert response.status_code == status.HTTP_403_FORBIDDEN
+    assert response.data["detail"].code == "permission_denied"
+
+
+@pytest.mark.django_db
+def test_guest_can_list_stages_for_published_event(api_client):
+    organizer = CustomUserFactory(organizer=True, password="StrongPass9!x")
+    event = EventFactory(
+        published=True,
+        organizer=organizer,
+        start_date="2027-01-18T12:50:58.048Z",
+        end_date="2027-05-12T02:54:53.468Z",
+    )
+    event_stage = EventStageFactory(
+        event=event,
+        end_time="2027-02-12T12:00:00.048Z",
+        start_time="2027-02-12T10:00:00.468Z"
+    )
+
+    eventstage_list_url = reverse("eventstage-list", kwargs={"version": "v1"})
+
+    response = api_client.get(eventstage_list_url)
+
+    assert response.status_code == status.HTTP_200_OK
+    assert response.data[0]['id'] == event_stage.id
