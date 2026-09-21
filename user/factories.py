@@ -12,6 +12,7 @@ class CustomUserFactory(factory.django.DjangoModelFactory):
     class Params:
         organizer = factory.Trait(role=CustomUser.Roles.ORGANIZER)
         participant = factory.Trait(role=CustomUser.Roles.PARTICIPANT)
+        staff = factory.Trait(role=CustomUser.Roles.STAFF)
 
     phone = factory.Sequence(lambda n: f"0{9000000000 + n}")
     first_name = factory.Faker("first_name")
