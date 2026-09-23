@@ -152,3 +152,86 @@ def test_participant_cannot_list_draft_event_attribute_values(get_auth_client):
 
     assert response.status_code == status.HTTP_200_OK
     assert all(item["id"] != event_attribute.id for item in response.data)
+
+
+@pytest.mark.django_db
+def test_organizer_can_create_text_attribute_value(get_auth_client):
+    organizer = CustomUserFactory(organizer=True, password="StrongPass9!x")
+    event = EventFactory(organizer=organizer)
+    attribute = AttributeFactory(text=True)
+    data = {"attribute": attribute.name, "event": event.id, "value_text": "مدرس کلاس"}
+
+    list_eventattributevalue_url = reverse(
+        "eventattributevalue-list", kwargs={"version": "v1"}
+    )
+
+    client = get_auth_client(organizer, password="StrongPass9!x")
+
+    response = client.post(list_eventattributevalue_url, data=data)
+
+    assert response.status_code == status.HTTP_201_CREATED
+    assert response.data["value_text"] == "مدرس کلاس"
+
+
+@pytest.mark.django_db
+def test_cannot_create_text_attribute_value_with_integer_value(get_auth_client):
+    organizer = CustomUserFactory(organizer=True, password="StrongPass9!x")
+    event = EventFactory(organizer=organizer)
+    attribute = AttributeFactory(text=True)
+    data = {"attribute": attribute.name, "event": event.id, "value_int": 1}
+
+    list_eventattributevalue_url = reverse(
+        "eventattributevalue-list", kwargs={"version": "v1"}
+    )
+
+    client = get_auth_client(organizer, password="StrongPass9!x")
+
+    response = client.post(list_eventattributevalue_url, data=data)
+
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
+
+
+@pytest.mark.django_db
+def test_cannot_create_attribute_value_with_multiple_values(get_auth_client):
+    organizer = CustomUserFactory(organizer=True, password="StrongPass9!x")
+    event = EventFactory(organizer=organizer)
+    attribute = AttributeFactory(text=True)
+    data = {
+        "attribute": attribute.name,
+        "event": event.id,
+        "value_text": "برگزار کننده",
+        "value_int": 1,
+    }
+
+    list_eventattributevalue_url = reverse(
+        "eventattributevalue-list", kwargs={"version": "v1"}
+    )
+
+    client = get_auth_client(organizer, password="StrongPass9!x")
+
+    response = client.post(list_eventattributevalue_url, data=data)
+
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
+    assert response.data['non_field_errors'][0].code == "invalid"
+
+@pytest.mark.django_db
+def test_cannot_create_boolean_attribute_value_without_value(get_auth_client):
+    organizer = CustomUserFactory(organizer=True, password="StrongPass9!x")
+    event = EventFactory(organizer=organizer)
+    attribute = AttributeFactory(boolean=True)
+
+    data = {
+        "attribute": attribute.name,
+        "event": event.id
+    }
+
+    list_eventattributevalue_url = reverse(
+        "eventattributevalue-list", kwargs={"version": "v1"}
+    )
+
+    client = get_auth_client(organizer, password="StrongPass9!x")
+
+    response = client.post(list_eventattributevalue_url, data=data)
+
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
+    assert response.data['non_field_errors'][0].code == "invalid"
