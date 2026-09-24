@@ -235,3 +235,50 @@ def test_cannot_create_boolean_attribute_value_without_value(get_auth_client):
 
     assert response.status_code == status.HTTP_400_BAD_REQUEST
     assert response.data['non_field_errors'][0].code == "invalid"
+
+@pytest.mark.django_db
+def test_event_owner_cannot_create_attribute_value_for_published_event(get_auth_client):
+    organizer = CustomUserFactory(organizer=True, password="StrongPass9!x")
+    event = EventFactory(published=True, organizer=organizer)
+    attribute = AttributeFactory(text=True)
+
+    data = {
+        "attribute": attribute.name,
+        "event": event.id,
+        "value_text": "مدرس دوره"
+    }
+
+    list_eventattributevalue_url = reverse(
+        "eventattributevalue-list", kwargs={"version": "v1"}
+    )
+
+    client = get_auth_client(organizer, password="StrongPass9!x")
+
+    response = client.post(list_eventattributevalue_url, data=data)
+
+    assert response.status_code == status.HTTP_403_FORBIDDEN
+    assert response.data["detail"].code == "permission_denied"
+
+@pytest.mark.django_db
+def test_other_organizer_cannot_create_attribute_value(get_auth_client):
+    organizer = CustomUserFactory(organizer=True, password="StrongPass9!x")
+    other_organizer = CustomUserFactory(organizer=True, password="StrongPass9!x")
+    event = EventFactory(organizer=other_organizer)
+    attribute = AttributeFactory(text=True)
+
+    data = {
+        "attribute": attribute.name,
+        "event": event.id,
+        "value_text": "مدرس دوره"
+    }
+
+    list_eventattributevalue_url = reverse(
+        "eventattributevalue-list", kwargs={"version": "v1"}
+    )
+
+    client = get_auth_client(organizer, password="StrongPass9!x")
+
+    response = client.post(list_eventattributevalue_url, data=data)
+
+    assert response.status_code == status.HTTP_403_FORBIDDEN
+    assert response.data["detail"].code == "permission_denied"
