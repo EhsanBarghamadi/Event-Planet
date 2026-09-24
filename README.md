@@ -282,7 +282,7 @@ This project is **API-only**. Per the task description, a UI was optional, and n
 
 Planned next steps for this project, roughly in order:
 
-- [ ] **Seed data / fixtures generator** — a management command (likely `factory_boy` + `Faker`) to bulk-generate realistic users, events, stages, and registrations for demoing and manual QA.
+- [x] **Seed data / fixtures generator** — a management command (likely `factory_boy` + `Faker`) to bulk-generate realistic users, events, stages, and registrations for demoing and manual QA.
 - [ ] **Automated tests** — unit and API tests per app (`user`, `event`, `attribute`, `relation`), covering the permission rules and the state-machine / EAV validation logic described above.
 - [ ] **Throttling** — rate-limiting on sensitive endpoints (auth, registration) to prevent abuse.
 - [ ] **Caching** — caching for read-heavy public endpoints (published events, results).
