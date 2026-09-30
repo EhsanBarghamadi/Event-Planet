@@ -280,13 +280,23 @@ This project is **API-only**. Per the task description, a UI was optional, and n
 
 ## Roadmap
 
-Planned next steps for this project, roughly in order:
+Planned and ongoing work for this project:
 
-- [x] **Seed data / fixtures generator** — a management command (likely `factory_boy` + `Faker`) to bulk-generate realistic users, events, stages, and registrations for demoing and manual QA.
-- [ ] **Automated tests** — unit and API tests per app (`user`, `event`, `attribute`, `relation`), covering the permission rules and the state-machine / EAV validation logic described above.
-- [ ] **Throttling** — rate-limiting on sensitive endpoints (auth, registration) to prevent abuse.
-- [ ] **Caching** — caching for read-heavy public endpoints (published events, results).
-- [ ] **Pagination** — consistent pagination on all list endpoints.
+- [x] **Seed data / fixtures generator** — A management command using `factory_boy` and `Faker` to generate realistic users, events, stages, and registrations for demoing and manual QA.
+
+- [ ] **Automated tests**
+  - [x] `event` — API tests for access control, permissions, event creation/update, state transitions, and event stages.
+  - [x] `attribute` — API tests for attribute access, event attribute values, permissions, and EAV validation.
+  - [ ] `relation` — Tests for registrations, feedback, and results.
+  - [ ] `user` — Tests for registration, authentication, permissions, and user-related APIs.
+
+- [ ] **Throttling** — Rate-limiting on sensitive endpoints such as authentication and registration.
+
+- [ ] **Caching** — Caching for read-heavy public endpoints such as published events and results.
+
+- [ ] **Pagination** — Consistent pagination across list endpoints.
+
+- [ ] **CI / GitHub Actions** — Run the automated test suite and code-quality checks automatically on every push and pull request.
 
 ---
 
