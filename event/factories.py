@@ -10,6 +10,7 @@ class EventFactory(factory.django.DjangoModelFactory):
         model = Event
 
     class Params:
+        draft = factory.Trait(status=Event.Status.DRAFT)
         published = factory.Trait(status=Event.Status.PUBLISHED)
         ongoing = factory.Trait(status=Event.Status.ONGOING)
         closed = factory.Trait(status=Event.Status.CLOSED)
