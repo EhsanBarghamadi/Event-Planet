@@ -4,7 +4,7 @@ from rest_framework import status
 
 from user.factories import CustomUserFactory
 from event.factories import EventFactory
-from relation.factories import RegistrationFactory
+from relation.factories import RegistrationFactory, FeedbackFactory
 
 
 @pytest.mark.django_db
@@ -91,3 +91,76 @@ def test_participant_cannot_create_duplicate_feedback(get_auth_client):
     assert response_2.status_code == status.HTTP_400_BAD_REQUEST
     assert response_1.data["participant"] == participant.id
     assert response_2.data["participant"][0].code == "invalid"
+
+
+@pytest.mark.django_db
+def test_participant_cannot_list_another_participant_feedback(get_auth_client):
+    participant_1 = CustomUserFactory(participant=True, password="StrongPass9!x")
+    participant_2 = CustomUserFactory(participant=True, password="StrongPass9!x")
+    event = EventFactory(finished=True)
+    RegistrationFactory(participant=participant_1, event=event)
+    RegistrationFactory(participant=participant_2, event=event)
+    FeedbackFactory(participant=participant_1, event=event)
+    feedback_url = reverse("feedback-list", kwargs={"version": "v1"})
+
+    client = get_auth_client(participant_2, password="StrongPass9!x")
+
+    response = client.get(feedback_url)
+
+    assert response.status_code == status.HTTP_200_OK
+    assert response.data == []
+
+
+@pytest.mark.django_db
+def test_participant_can_list_own_feedback(get_auth_client):
+    participant = CustomUserFactory(participant=True, password="StrongPass9!x")
+    event = EventFactory(finished=True)
+    RegistrationFactory(participant=participant, event=event)
+    feedback = FeedbackFactory(participant=participant, event=event)
+    feedback_url = reverse("feedback-list", kwargs={"version": "v1"})
+
+    client = get_auth_client(participant, password="StrongPass9!x")
+
+    response = client.get(feedback_url)
+
+    assert response.status_code == status.HTTP_200_OK
+    assert any(item["participant"] == participant.id for item in response.data)
+    assert any(item["comment"] == feedback.comment for item in response.data)
+
+
+@pytest.mark.django_db
+def test_participant_cannot_retrieve_another_participant_feedback(get_auth_client):
+    participant_1 = CustomUserFactory(participant=True, password="StrongPass9!x")
+    participant_2 = CustomUserFactory(participant=True, password="StrongPass9!x")
+    event = EventFactory(finished=True)
+    RegistrationFactory(participant=participant_1, event=event)
+    RegistrationFactory(participant=participant_2, event=event)
+    feedback = FeedbackFactory(participant=participant_1, event=event)
+    feedback_url = reverse(
+        "feedback-detail", kwargs={"version": "v1", "pk": feedback.id}
+    )
+
+    client = get_auth_client(participant_2, password="StrongPass9!x")
+
+    response = client.get(feedback_url)
+
+    assert response.status_code == status.HTTP_404_NOT_FOUND
+    assert response.data["detail"].code == "not_found"
+
+
+@pytest.mark.django_db
+def test_participant_can_retrieve_own_feedback(get_auth_client):
+    participant = CustomUserFactory(participant=True, password="StrongPass9!x")
+    event = EventFactory(finished=True)
+    RegistrationFactory(participant=participant, event=event)
+    feedback = FeedbackFactory(participant=participant, event=event)
+    feedback_url = reverse(
+        "feedback-detail", kwargs={"version": "v1", "pk": feedback.id}
+    )
+
+    client = get_auth_client(participant, password="StrongPass9!x")
+
+    response = client.get(feedback_url)
+
+    assert response.status_code == status.HTTP_200_OK
+    assert response.data["comment"] == feedback.comment
