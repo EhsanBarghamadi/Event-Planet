@@ -7,7 +7,6 @@ from user.factories import CustomUserFactory
 from event.factories import EventFactory
 from relation.factories import RegistrationFactory
 
-
 @pytest.mark.django_db
 def test_participant_can_register_for_published_event(get_auth_client):
     participant = CustomUserFactory(participant=True, password="StrongPass9!x")
@@ -232,3 +231,35 @@ def test_participant_can_delete_own_registration(get_auth_client):
     assert response_1.status_code == status.HTTP_204_NO_CONTENT
     assert response_1.data is None
     assert not Registration.objects.filter(id=registration.id).exists()
+
+
+@pytest.mark.django_db
+def test_organizer_cannot_list_participant_registrations(get_auth_client):
+    organizer = CustomUserFactory(organizer=True, password="StrongPass9!x")
+    participant = CustomUserFactory(participant=True, password="StrongPass9!x")
+    event = EventFactory(published=True)
+    RegistrationFactory(participant=participant, event=event)
+    registration_url = reverse("registration-list", kwargs={"version": "v1"})
+
+    client = get_auth_client(organizer, password="StrongPass9!x")
+
+    response = client.get(registration_url)
+
+    assert response.status_code == status.HTTP_200_OK
+    assert response.data == []
+
+
+@pytest.mark.django_db
+def test_organizer_cannot_retrieve_participant_registration(get_auth_client):
+    organizer = CustomUserFactory(organizer=True, password="StrongPass9!x")
+    participant = CustomUserFactory(participant=True, password="StrongPass9!x")
+    event = EventFactory(published=True)
+    registration = RegistrationFactory(participant=participant, event=event)
+    registration_url = reverse("registration-detail", kwargs={"version": "v1", "pk": registration.id})
+
+    client = get_auth_client(organizer, password="StrongPass9!x")
+
+    response = client.get(registration_url)
+
+    assert response.status_code == status.HTTP_404_NOT_FOUND
+    assert response.data["detail"].code == "not_found"
