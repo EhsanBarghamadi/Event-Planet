@@ -287,7 +287,7 @@ Planned and ongoing work for this project:
 - [ ] **Automated tests**
   - [x] `event` — API tests for access control, permissions, event creation/update, state transitions, and event stages.
   - [x] `attribute` — API tests for attribute access, event attribute values, permissions, and EAV validation.
-  - [ ] `relation` — Tests for registrations, feedback, and results.
+  - [x] `relation` — Tests for registrations, feedback, and results.
   - [ ] `user` — Tests for registration, authentication, permissions, and user-related APIs.
 
 - [ ] **Throttling** — Rate-limiting on sensitive endpoints such as authentication and registration.
