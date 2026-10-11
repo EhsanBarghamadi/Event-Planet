@@ -68,7 +68,18 @@ class ResultViewSet(viewsets.ModelViewSet):
     def get_permissions(self):
         if self.action in ["create", "partial_update", "update", "destroy"]:
             return [permissions.IsAuthenticated(), IsOrganizer(), IsEventOwner()]
-        return [permissions.AllowAny()]
+        return [permissions.IsAuthenticated()]
 
     def get_queryset(self):
-        return Result.objects.filter(event__status="FINISHED")
+        user = self.request.user
+        if not user.is_authenticated:
+            return Result.objects.none()
+        if user.role == "PARTICIPANT":
+            return Result.objects.select_related("event").filter(event__status="FINISHED", event__registrations__participant=user)
+        if user.role == "ORGANIZER":
+            return Result.objects.filter(
+                event__status="FINISHED", event__organizer=user
+            )
+        if user.role == "STAFF":
+            return Result.objects.filter(event__status="FINISHED")
+        return Result.objects.none()
