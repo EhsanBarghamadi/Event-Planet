@@ -290,3 +290,24 @@ def test_participant_cannot_list_unregistered_event_results(get_auth_client):
     assert response.status_code == status.HTTP_200_OK
     assert response.data == []
 
+
+@pytest.mark.django_db
+def test_create_result_with_invalid_event_id(get_auth_client):
+    participant = CustomUserFactory(participant=True, password="StrongPass9!x")
+    organizer = CustomUserFactory(organizer=True, password="StrongPass9!x")
+    event = EventFactory(finished=True, organizer=organizer)
+    RegistrationFactory(participant=participant, event=event)
+    result_url = reverse("result-list", kwargs={"version": "v1"})
+
+    client = get_auth_client(organizer, password="StrongPass9!x")
+
+    data = {
+        "achievement": "کسب مقام اول",
+        "event_id": "abc",
+        "participant_id": participant.id,
+    }
+
+    response = client.post(result_url, data=data)
+
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
+    assert "event_id" in response.data

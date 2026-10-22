@@ -40,10 +40,13 @@ class IsEventOwner(permissions.BasePermission):
             if event_id and event and str(event_id) != str(event):
                 return False
 
-            event_id_to_check = event_id or event
-            return Event.objects.filter(
-                id=event_id_to_check, organizer=request.user
-            ).exists()
+            try:
+                event_id_to_check = event_id or event
+                return Event.objects.filter(
+                    id=event_id_to_check, organizer=request.user
+                ).exists()
+            except (ValueError, TypeError):
+                return True
         return True
 
     def has_object_permission(self, request, view, obj):
@@ -69,8 +72,10 @@ class IsEventDraft(permissions.BasePermission):
             event_id = request.data.get("event_id") or request.data.get("event")
             if not event_id:
                 return True
-
-            event = Event.objects.filter(id=event_id).first()
+            try:
+                event = Event.objects.filter(id=event_id).first()
+            except (ValueError, TypeError):
+                return True
             return bool(event and event.status == "DRAFT")
         return True
 
