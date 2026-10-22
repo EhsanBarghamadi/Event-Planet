@@ -4,6 +4,7 @@ black==26.5.1
 click==8.4.2
 coverage==7.15.4
 Django==6.0.3
+django-debug-toolbar==8.0.0
 django-extensions==4.1
 django-filter==25.2
 djangorestframework==3.17.1
