@@ -1,9 +1,11 @@
 from rest_framework import viewsets
 from rest_framework import permissions
 from django.db import transaction
+from django.db.models import Prefetch
 
 from core.permissions import IsParticipant, IsEventOwner, IsOrganizer, IsFeedbackOwner
 from event.models import Event
+from attribute.models import EventAttributeValue
 from .models import Registration, Feedback, Result
 from .serializers import (
     RegistrationSerializer,
@@ -43,12 +45,18 @@ class FeedbackViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         user = self.request.user
+        base = Feedback.objects.select_related("event").prefetch_related(
+            Prefetch(
+            "event__attribute_values",
+            queryset=EventAttributeValue.objects.select_related("attribute"),
+        )
+        )
         if getattr(self, "swagger_fake_view", False):
             return Feedback.objects.none()
         if user.role == "PARTICIPANT":
-            return Feedback.objects.filter(participant=user)
+            return base.filter(participant=user)
         if user.role == "ORGANIZER" and user.events.exists():
-            return Feedback.objects.filter(event__organizer=user)
+            return base.filter(event__organizer=user)
         return Feedback.objects.none()
 
     def get_permissions(self):
