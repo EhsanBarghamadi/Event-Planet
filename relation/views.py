@@ -74,12 +74,15 @@ class ResultViewSet(viewsets.ModelViewSet):
         user = self.request.user
         if not user.is_authenticated:
             return Result.objects.none()
+        base = Result.objects.select_related("event", "participant").prefetch_related(
+            "event__attribute_values__attribute"
+        )
         if user.role == "PARTICIPANT":
-            return Result.objects.select_related("event").filter(event__status="FINISHED", event__registrations__participant=user)
-        if user.role == "ORGANIZER":
-            return Result.objects.filter(
-                event__status="FINISHED", event__organizer=user
+            return base.filter(
+                event__status="FINISHED", event__registrations__participant=user
             )
+        if user.role == "ORGANIZER":
+            return base.filter(event__status="FINISHED", event__organizer=user)
         if user.role == "STAFF":
-            return Result.objects.filter(event__status="FINISHED")
+            return base.filter(event__status="FINISHED")
         return Result.objects.none()
