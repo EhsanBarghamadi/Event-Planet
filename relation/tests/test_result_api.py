@@ -2,6 +2,7 @@ import pytest
 from django.urls import reverse
 from rest_framework import status
 
+from relation.models import Result
 from user.factories import CustomUserFactory
 from event.factories import EventFactory
 from relation.factories import RegistrationFactory, ResultFactory
@@ -178,7 +179,7 @@ def test_participant_can_retrieve_own_result(get_auth_client):
 
 
 @pytest.mark.django_db
-def test_participant_cannot_retrieve_another_participant_result(get_auth_client):
+def test_unregistered_participant_cannot_retrieve_result(get_auth_client):
     participant_1 = CustomUserFactory(participant=True, password="StrongPass9!x")
     participant_2 = CustomUserFactory(participant=True, password="StrongPass9!x")
     organizer = CustomUserFactory(organizer=True, password="StrongPass9!x")
@@ -311,3 +312,180 @@ def test_create_result_with_invalid_event_id(get_auth_client):
 
     assert response.status_code == status.HTTP_400_BAD_REQUEST
     assert "event_id" in response.data
+
+
+@pytest.mark.django_db
+def test_staff_can_list_results_for_all_finished_events(get_auth_client):
+    staff = CustomUserFactory(staff=True, password="StrongPass9!x")
+    result_1 = ResultFactory()
+    result_2 = ResultFactory()
+    result_url = reverse("result-list", kwargs={"version": "v1"})
+
+    client = get_auth_client(staff, password="StrongPass9!x")
+
+    response = client.get(result_url)
+
+    assert response.status_code == status.HTTP_200_OK
+    assert any(item["id"] == result_1.id for item in response.data)
+    assert any(item["id"] == result_2.id for item in response.data)
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize(
+    "event_status",
+    [
+        "DRAFT",
+        "PUBLISHED",
+        "ONGOING",
+        "CLOSED",
+        "CANCELLED",
+    ],
+)
+def test_staff_cannot_list_results_for_unfinished_events(get_auth_client, event_status):
+    staff = CustomUserFactory(staff=True, password="StrongPass9!x")
+    event = EventFactory(status=event_status)
+    result = ResultFactory(event=event)
+    result_url = reverse("result-list", kwargs={"version": "v1"})
+
+    client = get_auth_client(staff, password="StrongPass9!x")
+
+    response = client.get(result_url)
+
+    assert response.status_code == status.HTTP_200_OK
+    assert all(item["id"] != result.id for item in response.data)
+
+
+@pytest.mark.django_db
+def test_organizer_cannot_create_result_for_another_organizers_event(get_auth_client):
+    participant = CustomUserFactory(participant=True, password="StrongPass9!x")
+    organizer_1 = CustomUserFactory(organizer=True, password="StrongPass9!x")
+    organizer_2 = CustomUserFactory(organizer=True, password="StrongPass9!x")
+    event = EventFactory(organizer=organizer_1)
+    RegistrationFactory(participant=participant, event=event)
+    result_url = reverse("result-list", kwargs={"version": "v1"})
+
+    client = get_auth_client(organizer_2, password="StrongPass9!x")
+
+    data = {
+        "achievement": "کسب مقام اول",
+        "event_id": event.id,
+        "participant_id": participant.id,
+    }
+
+    response = client.post(result_url, data=data)
+
+    assert response.status_code == status.HTTP_403_FORBIDDEN
+    assert response.data["detail"].code == "permission_denied"
+
+
+@pytest.mark.django_db
+def test_organizer_can_update_own_result(get_auth_client):
+    organizer = CustomUserFactory(organizer=True, password="StrongPass9!x")
+    event = EventFactory(finished=True, organizer=organizer)
+    participant = CustomUserFactory(participant=True, password="StrongPass9!x")
+    RegistrationFactory(participant=participant, event=event)
+    result = ResultFactory(participant=participant, event=event)
+
+    result_url = reverse("result-detail", kwargs={"version": "v1", "pk": result.id})
+
+    client = get_auth_client(organizer, password="StrongPass9!x")
+
+    data = {"achievement": "کسب مقام دهم"}
+
+    response = client.patch(result_url, data=data)
+
+    assert response.status_code == status.HTTP_200_OK
+    assert response.data["id"] == result.id
+    assert response.data["achievement"] == data["achievement"]
+
+
+@pytest.mark.django_db
+def test_organizer_can_delete_own_result(get_auth_client):
+    organizer = CustomUserFactory(organizer=True, password="StrongPass9!x")
+    event = EventFactory(finished=True, organizer=organizer)
+    participant = CustomUserFactory(participant=True, password="StrongPass9!x")
+    RegistrationFactory(participant=participant, event=event)
+    result = ResultFactory(participant=participant, event=event)
+
+    result_url = reverse("result-detail", kwargs={"version": "v1", "pk": result.id})
+
+    client = get_auth_client(organizer, password="StrongPass9!x")
+
+    response = client.delete(result_url)
+
+    assert response.status_code == status.HTTP_204_NO_CONTENT
+    assert not Result.objects.filter(id=result.id).exists()
+
+
+@pytest.mark.django_db
+def test_organizer_cannot_update_another_organizers_result(get_auth_client):
+    organizer_1 = CustomUserFactory(organizer=True, password="StrongPass9!x")
+    organizer_2 = CustomUserFactory(organizer=True, password="StrongPass9!x")
+    event = EventFactory(finished=True, organizer=organizer_1)
+    participant = CustomUserFactory(participant=True, password="StrongPass9!x")
+    RegistrationFactory(participant=participant, event=event)
+    result = ResultFactory(participant=participant, event=event)
+
+    result_url = reverse("result-detail", kwargs={"version": "v1", "pk": result.id})
+
+    client = get_auth_client(organizer_2, password="StrongPass9!x")
+
+    data = {"achievement": "کسب مقام دهم"}
+
+    response = client.patch(result_url, data=data)
+
+    assert response.status_code == status.HTTP_404_NOT_FOUND
+
+
+@pytest.mark.django_db
+def test_organizer_cannot_delete_another_organizers_result(get_auth_client):
+    organizer_1 = CustomUserFactory(organizer=True, password="StrongPass9!x")
+    organizer_2 = CustomUserFactory(organizer=True, password="StrongPass9!x")
+    event = EventFactory(finished=True, organizer=organizer_1)
+    participant = CustomUserFactory(participant=True, password="StrongPass9!x")
+    RegistrationFactory(participant=participant, event=event)
+    result = ResultFactory(participant=participant, event=event)
+
+    result_url = reverse("result-detail", kwargs={"version": "v1", "pk": result.id})
+
+    client = get_auth_client(organizer_2, password="StrongPass9!x")
+
+    response = client.delete(result_url)
+
+    assert response.status_code == status.HTTP_404_NOT_FOUND
+
+
+@pytest.mark.django_db
+def test_participant_cannot_update_result(get_auth_client):
+    organizer = CustomUserFactory(organizer=True, password="StrongPass9!x")
+    participant = CustomUserFactory(participant=True, password="StrongPass9!x")
+    event = EventFactory(finished=True, organizer=organizer)
+    RegistrationFactory(participant=participant, event=event)
+    result = ResultFactory(participant=participant, event=event)
+
+    result_url = reverse("result-detail", kwargs={"version": "v1", "pk": result.id})
+
+    client = get_auth_client(participant, password="StrongPass9!x")
+
+    data = {"achievement": "کسب مقام دهم"}
+
+    response = client.patch(result_url, data=data)
+
+    assert response.status_code == status.HTTP_403_FORBIDDEN
+
+
+@pytest.mark.django_db
+def test_participant_cannot_delete_result(get_auth_client):
+    organizer = CustomUserFactory(organizer=True, password="StrongPass9!x")
+    participant = CustomUserFactory(participant=True, password="StrongPass9!x")
+    event = EventFactory(finished=True, organizer=organizer)
+    RegistrationFactory(participant=participant, event=event)
+    result = ResultFactory(participant=participant, event=event)
+
+    result_url = reverse("result-detail", kwargs={"version": "v1", "pk": result.id})
+
+    client = get_auth_client(participant, password="StrongPass9!x")
+
+    response = client.delete(result_url)
+
+    assert response.status_code == status.HTTP_403_FORBIDDEN
