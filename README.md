@@ -284,11 +284,11 @@ Planned and ongoing work for this project:
 
 - [x] **Seed data / fixtures generator** — A management command using `factory_boy` and `Faker` to generate realistic users, events, stages, and registrations for demoing and manual QA.
 
-- [ ] **Automated tests**
+- [x] **Automated tests**
   - [x] `event` — API tests for access control, permissions, event creation/update, state transitions, and event stages.
   - [x] `attribute` — API tests for attribute access, event attribute values, permissions, and EAV validation.
   - [x] `relation` — Tests for registrations, feedback, and results.
-  - [ ] `user` — Tests for registration, authentication, permissions, and user-related APIs.
+  - [x] `user` — Tests for registration, authentication, permissions, and user-related APIs.
 
 - [ ] **Throttling** — Rate-limiting on sensitive endpoints such as authentication and registration.
 
