@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from event.models import Event
-from user.serializers import UserReadOnlySerializer
+from user.serializers import UserReadOnlySerializer, ParticipantPublicSerializer
 from event.serializers import EventSerializer
 from user.models import CustomUser
 from .models import Registration, Feedback, Result
@@ -101,7 +101,7 @@ class ResultSerializer(serializers.ModelSerializer):
     event_id = serializers.PrimaryKeyRelatedField(
         source="event", queryset=Event.objects.all(), write_only=True
     )
-    participant = UserReadOnlySerializer(read_only=True)
+    participant = ParticipantPublicSerializer(read_only=True)
     participant_id = serializers.PrimaryKeyRelatedField(
         source="participant", queryset=CustomUser.objects.all(), write_only=True
     )

@@ -489,3 +489,25 @@ def test_participant_cannot_delete_result(get_auth_client):
     response = client.delete(result_url)
 
     assert response.status_code == status.HTTP_403_FORBIDDEN
+
+
+@pytest.mark.django_db
+def test_result_does_not_expose_participant_phone(get_auth_client):
+    participant = CustomUserFactory(participant=True, password="StrongPass9!x")
+    organizer = CustomUserFactory(organizer=True, password="StrongPass9!x")
+    event = EventFactory(finished=True, organizer=organizer)
+    RegistrationFactory(participant=participant, event=event)
+    result = ResultFactory(participant=participant, event=event)
+
+    result_url = reverse(
+        "result-detail",
+        kwargs={"version": "v1", "pk": result.id},
+    )
+
+    client = get_auth_client(participant, password="StrongPass9!x")
+
+    response = client.get(result_url)
+
+    assert response.status_code == status.HTTP_200_OK
+    assert response.data["achievement"] == result.achievement
+    assert "phone" not in response.data

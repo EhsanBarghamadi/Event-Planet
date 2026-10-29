@@ -260,7 +260,11 @@ def test_event_owner_can_see_participants(get_auth_client):
         participant2.id,
         participant3.id,
     }
-
+    assert {item["participant"]["phone"] for item in response.data} == {
+        participant1.phone,
+        participant2.phone,
+        participant3.phone,
+    }
 
 @pytest.mark.django_db
 def test_organizer_cannot_see_other_organizers_participants(get_auth_client):
